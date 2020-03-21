@@ -14,6 +14,8 @@ public final class Cli {
                 System.out.println(new StreamExpressionTransformer().transform(line));
             } catch (ExpressionSyntaxException ignored) {
                 System.out.println("SYNTAX ERROR");
+            } catch (ExpressionTypeException ignored) {
+                System.out.println("TYPE ERROR");
             }
             line = reader.readLine();
         }

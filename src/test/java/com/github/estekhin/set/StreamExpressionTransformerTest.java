@@ -71,4 +71,23 @@ class StreamExpressionTransformerTest {
         );
     }
 
+    @ParameterizedTest
+    @MethodSource("expressionsWithTypeErrors")
+    void transformExpressionWithTypeErrorThrowsExpressionTypeException(@NotNull String expression) {
+        assertThrows(ExpressionTypeException.class, () -> new StreamExpressionTransformer().transform(expression));
+    }
+
+    static @NotNull Stream<String> expressionsWithTypeErrors() {
+        return Stream.of(
+                "map{(1>2)}",
+                "filter{element}",
+                "filter{1}",
+                "filter{(1+2)}",
+                "map{(1+(2>3))}",
+                "map{((1>2)+3))}",
+                "filter{(1>(2>3))}",
+                "filter{((1>2)>3)}"
+        );
+    }
+
 }

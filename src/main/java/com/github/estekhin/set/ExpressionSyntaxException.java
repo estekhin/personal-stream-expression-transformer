@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 public final class ExpressionSyntaxException extends RuntimeException {
 
-    ExpressionSyntaxException(@NotNull String message) {
+    public ExpressionSyntaxException(@NotNull String message) {
         super(message);
     }
 
