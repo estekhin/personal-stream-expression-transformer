@@ -10,7 +10,11 @@ public final class Cli {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         String line = reader.readLine();
         while (line != null) {
-            System.out.println(new StreamExpressionTransformer().transform(line));
+            try {
+                System.out.println(new StreamExpressionTransformer().transform(line));
+            } catch (ExpressionSyntaxException ignored) {
+                System.out.println("SYNTAX ERROR");
+            }
             line = reader.readLine();
         }
     }
