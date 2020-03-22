@@ -46,6 +46,10 @@ public final class StreamExpressionParser {
     private @NotNull ExpressionNode parseExpression() {
         if (tryConsume(ElementNode.ELEMENT)) {
             return new ElementNode();
+        } else if (tryConsume(BooleanNode.TRUE)) {
+            return new BooleanNode(true);
+        } else if (tryConsume(BooleanNode.FALSE)) {
+            return new BooleanNode(false);
         } else if (tryConsume(BinaryOperationNode.BINARY_EXPRESSION_START)) {
             ExpressionNode operand1 = parseExpression();
             BinaryOperation operation = parseOperation();

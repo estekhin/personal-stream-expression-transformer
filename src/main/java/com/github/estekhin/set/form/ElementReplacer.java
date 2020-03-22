@@ -3,6 +3,7 @@ package com.github.estekhin.set.form;
 import java.util.Objects;
 
 import com.github.estekhin.set.ast.BinaryOperationNode;
+import com.github.estekhin.set.ast.BooleanNode;
 import com.github.estekhin.set.ast.ElementNode;
 import com.github.estekhin.set.ast.ExpressionNode;
 import com.github.estekhin.set.ast.NodeVisitor;
@@ -21,6 +22,11 @@ final class ElementReplacer implements NodeVisitor<ExpressionNode> {
 
     @Override
     public @NotNull ExpressionNode visitNumberNode(@NotNull NumberNode node) {
+        return node;
+    }
+
+    @Override
+    public @NotNull ExpressionNode visitBooleanNode(@NotNull BooleanNode node) {
         return node;
     }
 

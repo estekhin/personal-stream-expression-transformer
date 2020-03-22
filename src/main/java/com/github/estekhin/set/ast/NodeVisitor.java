@@ -23,6 +23,10 @@ public interface NodeVisitor<R> {
         return null;
     }
 
+    default @Nullable R visitBooleanNode(@NotNull BooleanNode node) {
+        return null;
+    }
+
     default @Nullable R visitElementNode(@NotNull ElementNode node) {
         return null;
     }

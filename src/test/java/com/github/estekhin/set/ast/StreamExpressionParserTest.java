@@ -31,21 +31,17 @@ class StreamExpressionParserTest {
                 Arguments.of(
                         "filter{(1=1)}",
                         new StreamExpressionNode(
-                                new FilterCallNode(new BinaryOperationNode(
-                                        new NumberNode(1),
-                                        BinaryOperation.EQUALS,
-                                        new NumberNode(1)
-                                ))
+                                new FilterCallNode(
+                                        new BooleanNode(true)
+                                )
                         )
                 ),
                 Arguments.of(
                         "filter{(1=0)}",
                         new StreamExpressionNode(
-                                new FilterCallNode(new BinaryOperationNode(
-                                        new NumberNode(1),
-                                        BinaryOperation.EQUALS,
-                                        new NumberNode(0)
-                                ))
+                                new FilterCallNode(
+                                        new BooleanNode(false)
+                                )
                         )
                 ),
                 Arguments.of(

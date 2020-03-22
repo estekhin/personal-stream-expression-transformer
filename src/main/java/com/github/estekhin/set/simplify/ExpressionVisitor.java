@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Objects;
 
 import com.github.estekhin.set.ast.BinaryOperationNode;
+import com.github.estekhin.set.ast.BooleanNode;
 import com.github.estekhin.set.ast.ElementNode;
 import com.github.estekhin.set.ast.ExpressionNode;
 import com.github.estekhin.set.ast.NodeVisitor;
@@ -14,6 +15,11 @@ final class ExpressionVisitor implements NodeVisitor<ExpressionNode> {
 
     @Override
     public @NotNull ExpressionNode visitNumberNode(@NotNull NumberNode node) {
+        return node;
+    }
+
+    @Override
+    public @NotNull ExpressionNode visitBooleanNode(@NotNull BooleanNode node) {
         return node;
     }
 
@@ -31,7 +37,8 @@ final class ExpressionVisitor implements NodeVisitor<ExpressionNode> {
                 new SimpleConstantFoldTransformer(),
                 new ZeroConstantTransformer(),
                 new OneConstantTransformer(),
-                new NegativeConstantTransformer()
+                new NegativeConstantTransformer(),
+                new BooleanConstantTransformer()
         );
         for (BinaryOperationTransformer transformer : transformers) {
             ExpressionNode simplified = transformer.tryApply(transformedOperand1, node.getOperation(), transformedOperand2);

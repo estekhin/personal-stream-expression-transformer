@@ -4,6 +4,7 @@ import java.util.stream.Stream;
 
 import com.github.estekhin.set.ast.BinaryOperation;
 import com.github.estekhin.set.ast.BinaryOperationNode;
+import com.github.estekhin.set.ast.BooleanNode;
 import com.github.estekhin.set.ast.ElementNode;
 import com.github.estekhin.set.ast.ExpressionNode;
 import com.github.estekhin.set.ast.NumberNode;
@@ -65,11 +66,7 @@ class ExpressionVisitorTest {
                                 BinaryOperation.EQUALS,
                                 new NumberNode(3)
                         ),
-                        new BinaryOperationNode(
-                                new NumberNode(1),
-                                BinaryOperation.EQUALS,
-                                new NumberNode(0)
-                        )
+                        new BooleanNode(false)
                 ),
                 Arguments.of(
                         new BinaryOperationNode(
@@ -77,11 +74,7 @@ class ExpressionVisitorTest {
                                 BinaryOperation.GREATER_THAN,
                                 new NumberNode(3)
                         ),
-                        new BinaryOperationNode(
-                                new NumberNode(1),
-                                BinaryOperation.EQUALS,
-                                new NumberNode(0)
-                        )
+                        new BooleanNode(false)
                 ),
                 Arguments.of(
                         new BinaryOperationNode(
@@ -89,11 +82,7 @@ class ExpressionVisitorTest {
                                 BinaryOperation.LESS_THAN,
                                 new NumberNode(3)
                         ),
-                        new BinaryOperationNode(
-                                new NumberNode(1),
-                                BinaryOperation.EQUALS,
-                                new NumberNode(1)
-                        )
+                        new BooleanNode(true)
                 ),
 
                 // ZeroConstantTransformer
@@ -191,6 +180,122 @@ class ExpressionVisitorTest {
                                 new ElementNode(),
                                 BinaryOperation.SUBTRACT,
                                 new NumberNode(1)
+                        )
+                ),
+
+                // BooleanConstantTransformer
+                Arguments.of(
+                        new BinaryOperationNode(
+                                new BooleanNode(true),
+                                BinaryOperation.AND,
+                                new BinaryOperationNode(
+                                        new ElementNode(),
+                                        BinaryOperation.EQUALS,
+                                        new NumberNode(0)
+                                )
+                        ),
+                        new BinaryOperationNode(
+                                new ElementNode(),
+                                BinaryOperation.EQUALS,
+                                new NumberNode(0)
+                        )
+                ),
+                Arguments.of(
+                        new BinaryOperationNode(
+                                new BooleanNode(false),
+                                BinaryOperation.AND,
+                                new BinaryOperationNode(
+                                        new ElementNode(),
+                                        BinaryOperation.EQUALS,
+                                        new NumberNode(0)
+                                )
+                        ),
+                        new BooleanNode(false)
+                ),
+                Arguments.of(
+                        new BinaryOperationNode(
+                                new BinaryOperationNode(
+                                        new ElementNode(),
+                                        BinaryOperation.EQUALS,
+                                        new NumberNode(0)
+                                ),
+                                BinaryOperation.AND,
+                                new BooleanNode(true)
+                        ),
+                        new BinaryOperationNode(
+                                new ElementNode(),
+                                BinaryOperation.EQUALS,
+                                new NumberNode(0)
+                        )
+                ),
+                Arguments.of(
+                        new BinaryOperationNode(
+                                new BinaryOperationNode(
+                                        new ElementNode(),
+                                        BinaryOperation.EQUALS,
+                                        new NumberNode(0)
+                                ),
+                                BinaryOperation.AND,
+                                new BooleanNode(false)
+                        ),
+                        new BooleanNode(false)
+                ),
+
+
+                Arguments.of(
+                        new BinaryOperationNode(
+                                new BooleanNode(true),
+                                BinaryOperation.OR,
+                                new BinaryOperationNode(
+                                        new ElementNode(),
+                                        BinaryOperation.EQUALS,
+                                        new NumberNode(0)
+                                )
+                        ),
+                        new BooleanNode(true)
+                ),
+                Arguments.of(
+                        new BinaryOperationNode(
+                                new BooleanNode(false),
+                                BinaryOperation.OR,
+                                new BinaryOperationNode(
+                                        new ElementNode(),
+                                        BinaryOperation.EQUALS,
+                                        new NumberNode(0)
+                                )
+                        ),
+                        new BinaryOperationNode(
+                                new ElementNode(),
+                                BinaryOperation.EQUALS,
+                                new NumberNode(0)
+                        )
+                ),
+                Arguments.of(
+                        new BinaryOperationNode(
+                                new BinaryOperationNode(
+                                        new ElementNode(),
+                                        BinaryOperation.EQUALS,
+                                        new NumberNode(0)
+                                ),
+                                BinaryOperation.OR,
+                                new BooleanNode(true)
+                        ),
+                        new BooleanNode(true)
+                ),
+                Arguments.of(
+                        new BinaryOperationNode(
+                                new BinaryOperationNode(
+                                        new ElementNode(),
+                                        BinaryOperation.EQUALS,
+                                        new NumberNode(0)
+                                ),
+                                BinaryOperation.OR,
+                                new BooleanNode(false)
+                        ),
+                        new BinaryOperationNode(
+                                new ElementNode(),
+                                BinaryOperation.EQUALS,
+                                new NumberNode(0)
                         )
                 )
         );
