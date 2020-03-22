@@ -38,7 +38,8 @@ final class ExpressionVisitor implements NodeVisitor<ExpressionNode> {
                 new ZeroConstantTransformer(),
                 new OneConstantTransformer(),
                 new NegativeConstantTransformer(),
-                new BooleanConstantTransformer()
+                new BooleanConstantTransformer(),
+                new NestedConstantFoldTransformer()
         );
         for (BinaryOperationTransformer transformer : transformers) {
             ExpressionNode simplified = transformer.tryApply(transformedOperand1, node.getOperation(), transformedOperand2);
