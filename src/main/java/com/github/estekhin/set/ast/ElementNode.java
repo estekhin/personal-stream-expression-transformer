@@ -1,8 +1,11 @@
-package com.github.estekhin.set.parser;
+package com.github.estekhin.set.ast;
 
 import org.jetbrains.annotations.NotNull;
 
 public final class ElementNode extends ExpressionNode {
+
+    public static final @NotNull String ELEMENT = "element";
+
 
     @Override
     public @NotNull ExpressionType type() {
@@ -14,9 +17,10 @@ public final class ElementNode extends ExpressionNode {
         return replacement;
     }
 
+
     @Override
     public @NotNull String toString() {
-        return Tokens.ELEMENT;
+        return ELEMENT;
     }
 
 }

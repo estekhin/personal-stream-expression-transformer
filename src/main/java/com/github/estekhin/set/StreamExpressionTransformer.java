@@ -2,41 +2,40 @@ package com.github.estekhin.set;
 
 import java.util.List;
 
-import com.github.estekhin.set.parser.BinaryOperation;
-import com.github.estekhin.set.parser.BinaryOperationNode;
-import com.github.estekhin.set.parser.CallChainNode;
-import com.github.estekhin.set.parser.CallNode;
-import com.github.estekhin.set.parser.ElementNode;
-import com.github.estekhin.set.parser.ExpressionNode;
-import com.github.estekhin.set.parser.ExpressionParser;
-import com.github.estekhin.set.parser.FilterCallNode;
-import com.github.estekhin.set.parser.MapCallNode;
-import com.github.estekhin.set.parser.NumberNode;
+import com.github.estekhin.set.ast.BinaryOperation;
+import com.github.estekhin.set.ast.BinaryOperationNode;
+import com.github.estekhin.set.ast.CallNode;
+import com.github.estekhin.set.ast.ElementNode;
+import com.github.estekhin.set.ast.ExpressionNode;
+import com.github.estekhin.set.ast.FilterCallNode;
+import com.github.estekhin.set.ast.MapCallNode;
+import com.github.estekhin.set.ast.NumberNode;
+import com.github.estekhin.set.ast.StreamExpressionNode;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class StreamExpressionTransformer {
 
     public @NotNull String transform(@NotNull String expression) {
-        return process(new ExpressionParser(expression).parse()).toString();
+        return process(new StreamExpressionParser(expression).parse()).toString();
     }
 
-    private @NotNull CallChainNode process(@NotNull CallChainNode callChainNode) {
+    private @NotNull StreamExpressionNode process(@NotNull StreamExpressionNode streamExpression) {
         ExpressionNode filterOperand = null;
         ExpressionNode mapOperand = new ElementNode();
-        for (CallNode callNode : callChainNode.getCalls()) {
-            if (callNode instanceof FilterCallNode) {
-                filterOperand = appendFilter(filterOperand, mapOperand, callNode.getOperand());
-            } else if (callNode instanceof MapCallNode) {
-                mapOperand = appendMap(mapOperand, callNode.getOperand());
+        for (CallNode call : streamExpression.getCalls()) {
+            if (call instanceof FilterCallNode) {
+                filterOperand = appendFilter(filterOperand, mapOperand, call.getOperand());
+            } else if (call instanceof MapCallNode) {
+                mapOperand = appendMap(mapOperand, call.getOperand());
             } else {
-                throw new IllegalStateException("unexpected CallNode: " + callNode);
+                throw new IllegalStateException("unexpected CallNode: " + call);
             }
         }
         if (filterOperand == null) {
             filterOperand = new BinaryOperationNode(new NumberNode(1), BinaryOperation.EQUALS, new NumberNode(1));
         }
-        return new CallChainNode(List.of(
+        return new StreamExpressionNode(List.of(
                 new FilterCallNode(filterOperand),
                 new MapCallNode(mapOperand)
         ));

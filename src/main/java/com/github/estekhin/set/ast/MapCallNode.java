@@ -1,15 +1,19 @@
-package com.github.estekhin.set.parser;
+package com.github.estekhin.set.ast;
 
 import com.github.estekhin.set.ExpressionTypeException;
 import org.jetbrains.annotations.NotNull;
 
 public final class MapCallNode extends CallNode {
 
+    public static final @NotNull String MAP_START = "map{";
+    public static final @NotNull String MAP_END = "}";
+
+
     public MapCallNode(@NotNull ExpressionNode operand) {
         super(operand);
         if (operand.type() != ExpressionType.INTEGER) {
             throw new ExpressionTypeException(String.format(
-                    "map operand '%s' has unexpected type %s",
+                    "map operand '%s' has invalid type %s",
                     operand, operand.type()
             ));
         }
@@ -18,7 +22,7 @@ public final class MapCallNode extends CallNode {
 
     @Override
     public @NotNull String toString() {
-        return Tokens.MAP_START + operand + Tokens.MAP_END;
+        return MAP_START + operand + MAP_END;
     }
 
 }

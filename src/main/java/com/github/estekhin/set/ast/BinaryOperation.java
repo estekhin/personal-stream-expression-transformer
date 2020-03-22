@@ -1,4 +1,4 @@
-package com.github.estekhin.set.parser;
+package com.github.estekhin.set.ast;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -37,6 +37,7 @@ public enum BinaryOperation {
     public @NotNull ExpressionType getResultType() {
         return resultType;
     }
+
 
     @Override
     public String toString() {

@@ -1,4 +1,4 @@
-package com.github.estekhin.set.parser;
+package com.github.estekhin.set.ast;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -10,8 +10,6 @@ public abstract class ExpressionNode extends Node {
 
     public abstract @NotNull ExpressionType type();
 
-    public @NotNull ExpressionNode replaceElement(@NotNull ExpressionNode replacement) {
-        return this;
-    }
+    public abstract @NotNull ExpressionNode replaceElement(@NotNull ExpressionNode replacement);
 
 }

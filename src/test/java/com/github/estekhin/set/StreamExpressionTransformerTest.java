@@ -8,7 +8,6 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class StreamExpressionTransformerTest {
 
@@ -62,51 +61,6 @@ class StreamExpressionTransformerTest {
                         "map{(element+1)}%>%filter{(((element>1)|(element<2))&((element*element)=25))}",
                         "filter{((((element+1)>1)|((element+1)<2))&(((element+1)*(element+1))=25))}%>%map{(element+1)}"
                 )
-        );
-    }
-
-
-    @ParameterizedTest
-    @MethodSource("expressionsWithSyntaxErrors")
-    void transformExpressionWithSyntaxErrorThrowsExpressionSyntaxException(@NotNull String expression) {
-        assertThrows(ExpressionSyntaxException.class, () -> new StreamExpressionTransformer().transform(expression));
-    }
-
-    static @NotNull Stream<String> expressionsWithSyntaxErrors() {
-        return Stream.of(
-                "map{element}>>>map{element}",
-                "map",
-                "filter",
-                "call{}",
-                "map{element",
-                "map{element)",
-                "map{element1}",
-                "map{item}",
-                "map{+1}",
-                "map{1e}",
-                "map{--1}",
-                "map{(1+2}}",
-                "map{(1^2)}",
-                "map{(1+2+3)}"
-        );
-    }
-
-    @ParameterizedTest
-    @MethodSource("expressionsWithTypeErrors")
-    void transformExpressionWithTypeErrorThrowsExpressionTypeException(@NotNull String expression) {
-        assertThrows(ExpressionTypeException.class, () -> new StreamExpressionTransformer().transform(expression));
-    }
-
-    static @NotNull Stream<String> expressionsWithTypeErrors() {
-        return Stream.of(
-                "map{(1>2)}",
-                "filter{element}",
-                "filter{1}",
-                "filter{(1+2)}",
-                "map{(1+(2>3))}",
-                "map{((1>2)+3))}",
-                "filter{(1>(2>3))}",
-                "filter{((1>2)>3)}"
         );
     }
 

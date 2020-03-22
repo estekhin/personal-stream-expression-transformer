@@ -1,4 +1,4 @@
-package com.github.estekhin.set.parser;
+package com.github.estekhin.set.ast;
 
 public enum ExpressionType {
 

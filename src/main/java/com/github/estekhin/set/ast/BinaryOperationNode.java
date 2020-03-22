@@ -1,9 +1,12 @@
-package com.github.estekhin.set.parser;
+package com.github.estekhin.set.ast;
 
 import com.github.estekhin.set.ExpressionTypeException;
 import org.jetbrains.annotations.NotNull;
 
 public final class BinaryOperationNode extends ExpressionNode {
+
+    public static final @NotNull String BINARY_EXPRESSION_START = "(";
+    public static final @NotNull String BINARY_EXPRESSION_END = ")";
 
     private final @NotNull ExpressionNode operand1;
     private final @NotNull BinaryOperation operation;
@@ -13,13 +16,13 @@ public final class BinaryOperationNode extends ExpressionNode {
     public BinaryOperationNode(@NotNull ExpressionNode operand1, @NotNull BinaryOperation operation, @NotNull ExpressionNode operand2) {
         if (operand1.type() != operation.getOperandsType()) {
             throw new ExpressionTypeException(String.format(
-                    "%s operation operand '%s' has unexpected type %s",
+                    "%s operation operand '%s' has invalid type %s",
                     operation, operand1, operand1.type()
             ));
         }
         if (operand2.type() != operation.getOperandsType()) {
             throw new ExpressionTypeException(String.format(
-                    "%s operation operand '%s' has unexpected type %s",
+                    "%s operation operand '%s' has invalid type %s",
                     operation, operand2, operand2.type()
             ));
         }
@@ -43,9 +46,10 @@ public final class BinaryOperationNode extends ExpressionNode {
         );
     }
 
+
     @Override
     public @NotNull String toString() {
-        return Tokens.BINARY_EXPRESSION_START + operand1 + operation + operand2 + Tokens.BINARY_EXPRESSION_END;
+        return BINARY_EXPRESSION_START + operand1 + operation + operand2 + BINARY_EXPRESSION_END;
     }
 
 }
