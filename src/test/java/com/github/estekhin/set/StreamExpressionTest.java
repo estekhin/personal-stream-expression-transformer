@@ -55,7 +55,7 @@ class StreamExpressionTest {
                 ),
                 Arguments.of(
                         "map{((1+element)+2)}",
-                        "filter{(1=1)}%>%map{((1+element)+2)}"
+                        "filter{(1=1)}%>%map{(3+element)}"
                 ),
                 Arguments.of(
                         "map{(2+(element+1))}",
@@ -71,7 +71,11 @@ class StreamExpressionTest {
                 ),
                 Arguments.of(
                         "filter{((1+element)>2)}",
-                        "filter{((1+element)>2)}%>%map{element}"
+                        "filter{(element>1)}%>%map{element}"
+                ),
+                Arguments.of(
+                        "filter{((1-element)>2)}",
+                        "filter{(-1>element)}%>%map{element}"
                 ),
                 Arguments.of(
                         "filter{(2<(element+1))}",
