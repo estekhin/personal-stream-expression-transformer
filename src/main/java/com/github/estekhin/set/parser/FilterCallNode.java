@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 
 public final class FilterCallNode extends CallNode {
 
-    FilterCallNode(@NotNull ExpressionNode operand) {
+    public FilterCallNode(@NotNull ExpressionNode operand) {
         super(operand);
         if (operand.type() != ExpressionType.BOOLEAN) {
             throw new ExpressionTypeException(String.format(

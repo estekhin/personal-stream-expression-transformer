@@ -35,12 +35,8 @@ class StreamExpressionTransformerTest {
                         "filter{((element+10)>10)}%>%map{((element+10)*(element+10))}"
                 ),
                 Arguments.of(
-                        "map{(element+10)}%>%filter{(element>10)}%>%map{(element*element)}",
-                        "filter{(element>0)}%>%map{((element*element)+((element*20)+100))}"
-                ),
-                Arguments.of(
                         "filter{(element>0)}%>%filter{(element<0)}%>%map{(element*element)}",
-                        "filter{(1=0)}%>%map{element}"
+                        "filter{((element>0)&(element<0))}%>%map{(element*element)}"
                 )
         );
     }

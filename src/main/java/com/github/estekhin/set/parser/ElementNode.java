@@ -10,6 +10,11 @@ public final class ElementNode extends ExpressionNode {
     }
 
     @Override
+    public @NotNull ExpressionNode replaceElement(@NotNull ExpressionNode replacement) {
+        return replacement;
+    }
+
+    @Override
     public @NotNull String toString() {
         return Tokens.ELEMENT;
     }

@@ -2,7 +2,7 @@ package com.github.estekhin.set.parser;
 
 import org.jetbrains.annotations.NotNull;
 
-enum BinaryOperation {
+public enum BinaryOperation {
 
     ADD("+", ExpressionType.INTEGER, ExpressionType.INTEGER),
     SUBTRACT("-", ExpressionType.INTEGER, ExpressionType.INTEGER),

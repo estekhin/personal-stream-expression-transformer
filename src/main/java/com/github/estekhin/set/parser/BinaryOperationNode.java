@@ -3,14 +3,14 @@ package com.github.estekhin.set.parser;
 import com.github.estekhin.set.ExpressionTypeException;
 import org.jetbrains.annotations.NotNull;
 
-final class BinaryOperationNode extends ExpressionNode {
+public final class BinaryOperationNode extends ExpressionNode {
 
     private final @NotNull ExpressionNode operand1;
     private final @NotNull BinaryOperation operation;
     private final @NotNull ExpressionNode operand2;
 
 
-    BinaryOperationNode(@NotNull ExpressionNode operand1, @NotNull BinaryOperation operation, @NotNull ExpressionNode operand2) {
+    public BinaryOperationNode(@NotNull ExpressionNode operand1, @NotNull BinaryOperation operation, @NotNull ExpressionNode operand2) {
         if (operand1.type() != operation.getOperandsType()) {
             throw new ExpressionTypeException(String.format(
                     "%s operation operand '%s' has unexpected type %s",
@@ -32,6 +32,15 @@ final class BinaryOperationNode extends ExpressionNode {
     @Override
     public @NotNull ExpressionType type() {
         return operation.getResultType();
+    }
+
+    @Override
+    public @NotNull ExpressionNode replaceElement(@NotNull ExpressionNode replacement) {
+        return new BinaryOperationNode(
+                operand1.replaceElement(replacement),
+                operation,
+                operand2.replaceElement(replacement)
+        );
     }
 
     @Override

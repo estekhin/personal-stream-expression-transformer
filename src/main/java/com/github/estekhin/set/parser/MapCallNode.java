@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 
 public final class MapCallNode extends CallNode {
 
-    MapCallNode(@NotNull ExpressionNode operand) {
+    public MapCallNode(@NotNull ExpressionNode operand) {
         super(operand);
         if (operand.type() != ExpressionType.INTEGER) {
             throw new ExpressionTypeException(String.format(

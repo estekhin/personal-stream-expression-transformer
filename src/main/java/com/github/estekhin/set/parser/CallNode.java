@@ -11,4 +11,9 @@ public abstract class CallNode extends Node {
         this.operand = operand;
     }
 
+
+    public final @NotNull ExpressionNode getOperand() {
+        return operand;
+    }
+
 }

@@ -7,7 +7,7 @@ public final class NumberNode extends ExpressionNode {
     private final long value;
 
 
-    NumberNode(long value) {
+    public NumberNode(long value) {
         this.value = value;
     }
 

@@ -10,4 +10,8 @@ public abstract class ExpressionNode extends Node {
 
     public abstract @NotNull ExpressionType type();
 
+    public @NotNull ExpressionNode replaceElement(@NotNull ExpressionNode replacement) {
+        return this;
+    }
+
 }

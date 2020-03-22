@@ -10,10 +10,14 @@ public final class CallChainNode extends Node {
     private final @NotNull List<CallNode> calls;
 
 
-    CallChainNode(@NotNull List<CallNode> calls) {
+    public CallChainNode(@NotNull List<CallNode> calls) {
         this.calls = List.copyOf(calls);
     }
 
+
+    public @NotNull List<CallNode> getCalls() {
+        return calls;
+    }
 
     @Override
     public @NotNull String toString() {
