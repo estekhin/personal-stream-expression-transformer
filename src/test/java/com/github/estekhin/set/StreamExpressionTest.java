@@ -50,6 +50,38 @@ class StreamExpressionTest {
                         "filter{(1=1)}%>%map{element}"
                 ),
                 Arguments.of(
+                        "map{((element+1)+2)}",
+                        "filter{(1=1)}%>%map{((element+1)+2)}"
+                ),
+                Arguments.of(
+                        "map{((1+element)+2)}",
+                        "filter{(1=1)}%>%map{((1+element)+2)}"
+                ),
+                Arguments.of(
+                        "map{(2+(element+1))}",
+                        "filter{(1=1)}%>%map{(2+(element+1))}"
+                ),
+                Arguments.of(
+                        "map{(2+(1+element))}",
+                        "filter{(1=1)}%>%map{(2+(1+element))}"
+                ),
+                Arguments.of(
+                        "filter{((element+1)>2)}",
+                        "filter{((element+1)>2)}%>%map{element}"
+                ),
+                Arguments.of(
+                        "filter{((1+element)>2)}",
+                        "filter{((1+element)>2)}%>%map{element}"
+                ),
+                Arguments.of(
+                        "filter{(2<(element+1))}",
+                        "filter{(2<(element+1))}%>%map{element}"
+                ),
+                Arguments.of(
+                        "filter{(2<(1+element))}",
+                        "filter{(2<(1+element))}%>%map{element}"
+                ),
+                Arguments.of(
                         "map{(element+1)}%>%map{(element+2)}%>%filter{(element>3)}",
                         "filter{(((element+1)+2)>3)}%>%map{((element+1)+2)}"
                 ),
