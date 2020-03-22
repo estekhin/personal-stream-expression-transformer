@@ -19,6 +19,22 @@ public final class ElementNode extends ExpressionNode {
 
 
     @Override
+    public int hashCode() {
+        return 0; // :facepalm:
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (obj == null || obj.getClass() != getClass()) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
     public @NotNull String toString() {
         return ELEMENT;
     }

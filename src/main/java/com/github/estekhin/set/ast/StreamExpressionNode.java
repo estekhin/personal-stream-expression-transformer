@@ -12,7 +12,14 @@ public final class StreamExpressionNode extends Node {
     private final @NotNull List<CallNode> calls;
 
 
+    public StreamExpressionNode(@NotNull CallNode... calls) {
+        this(List.of(calls));
+    }
+
     public StreamExpressionNode(@NotNull List<CallNode> calls) {
+        if (calls.isEmpty()) {
+            throw new IllegalArgumentException("calls is empty");
+        }
         this.calls = List.copyOf(calls);
     }
 
@@ -21,6 +28,23 @@ public final class StreamExpressionNode extends Node {
         return calls;
     }
 
+
+    @Override
+    public int hashCode() {
+        return calls.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (obj == null || obj.getClass() != getClass()) {
+            return false;
+        }
+        StreamExpressionNode other = (StreamExpressionNode) obj;
+        return calls.equals(other.calls);
+    }
 
     @Override
     public @NotNull String toString() {

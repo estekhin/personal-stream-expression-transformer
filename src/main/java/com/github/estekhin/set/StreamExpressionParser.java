@@ -38,14 +38,14 @@ public final class StreamExpressionParser {
     }
 
     private @NotNull CallNode parseCall() {
-        if (tryConsume(MapCallNode.MAP_START)) {
-            ExpressionNode operand = parseExpression();
-            consume(MapCallNode.MAP_END);
-            return new MapCallNode(operand);
-        } else if (tryConsume(FilterCallNode.FILTER_START)) {
+        if (tryConsume(FilterCallNode.FILTER_START)) {
             ExpressionNode operand = parseExpression();
             consume(FilterCallNode.FILTER_END);
             return new FilterCallNode(operand);
+        } else if (tryConsume(MapCallNode.MAP_START)) {
+            ExpressionNode operand = parseExpression();
+            consume(MapCallNode.MAP_END);
+            return new MapCallNode(operand);
         } else {
             throw newExpectedTokensException(source, index, MapCallNode.MAP_START, FilterCallNode.FILTER_START);
         }

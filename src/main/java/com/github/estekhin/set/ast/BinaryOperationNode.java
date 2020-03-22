@@ -48,6 +48,29 @@ public final class BinaryOperationNode extends ExpressionNode {
 
 
     @Override
+    public int hashCode() {
+        int result = 17;
+        result = 31 * result + operand1.hashCode();
+        result = 31 * result + operation.hashCode();
+        result = 31 * result + operand2.hashCode();
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (obj == null || obj.getClass() != getClass()) {
+            return false;
+        }
+        BinaryOperationNode other = (BinaryOperationNode) obj;
+        return operand1.equals(other.operand1)
+                && operation == other.operation
+                && operand2.equals(other.operand2);
+    }
+
+    @Override
     public @NotNull String toString() {
         return BINARY_EXPRESSION_START + operand1 + operation + operand2 + BINARY_EXPRESSION_END;
     }
