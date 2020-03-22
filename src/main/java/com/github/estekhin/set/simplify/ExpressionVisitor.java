@@ -28,7 +28,8 @@ final class ExpressionVisitor implements NodeVisitor<ExpressionNode> {
         ExpressionNode transformedOperand2 = Objects.requireNonNull(node.getOperand2().visit(this));
 
         List<BinaryOperationTransformer> transformers = List.of(
-                new SimpleConstantFoldBinaryOperationTransformer()
+                new SimpleConstantFoldBinaryOperationTransformer(),
+                new NegativeConstantBinaryOperationTransformer()
         );
         for (BinaryOperationTransformer transformer : transformers) {
             ExpressionNode simplified = transformer.tryApply(transformedOperand1, node.getOperation(), transformedOperand2);

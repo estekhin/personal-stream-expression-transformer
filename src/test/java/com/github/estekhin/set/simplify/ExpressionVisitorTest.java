@@ -34,6 +34,7 @@ class ExpressionVisitorTest {
                         new ElementNode()
                 ),
 
+                // SimpleConstantFoldBinaryOperationTransformer
                 Arguments.of(
                         new BinaryOperationNode(
                                 new NumberNode(2),
@@ -57,6 +58,44 @@ class ExpressionVisitorTest {
                                 new NumberNode(3)
                         ),
                         new NumberNode(6)
+                ),
+
+                // NegativeConstantBinaryOperationTransformer
+                Arguments.of(
+                        new BinaryOperationNode(
+                                new ElementNode(),
+                                BinaryOperation.ADD,
+                                new NumberNode(-1)
+                        ),
+                        new BinaryOperationNode(
+                                new ElementNode(),
+                                BinaryOperation.SUBTRACT,
+                                new NumberNode(1)
+                        )
+                ),
+                Arguments.of(
+                        new BinaryOperationNode(
+                                new ElementNode(),
+                                BinaryOperation.SUBTRACT,
+                                new NumberNode(-1)
+                        ),
+                        new BinaryOperationNode(
+                                new ElementNode(),
+                                BinaryOperation.ADD,
+                                new NumberNode(1)
+                        )
+                ),
+                Arguments.of(
+                        new BinaryOperationNode(
+                                new NumberNode(-1),
+                                BinaryOperation.ADD,
+                                new ElementNode()
+                        ),
+                        new BinaryOperationNode(
+                                new ElementNode(),
+                                BinaryOperation.SUBTRACT,
+                                new NumberNode(1)
+                        )
                 )
         );
     }
