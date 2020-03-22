@@ -28,9 +28,8 @@ final class SimpleConstantFoldBinaryOperationTransformer implements BinaryOperat
                 default:
                     throw new IllegalArgumentException("unexpected BinaryOperation: " + operation);
             }
-        } else {
-            return null;
         }
+        return null;
     }
 
 }
