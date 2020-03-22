@@ -10,6 +10,4 @@ public abstract class ExpressionNode extends Node {
 
     public abstract @NotNull ExpressionType type();
 
-    public abstract @NotNull ExpressionNode transform(@NotNull ExpressionNodeTransformer transformer);
-
 }

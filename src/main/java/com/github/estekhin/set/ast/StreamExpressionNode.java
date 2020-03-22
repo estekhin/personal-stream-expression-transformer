@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public final class StreamExpressionNode extends Node {
 
@@ -26,6 +27,11 @@ public final class StreamExpressionNode extends Node {
 
     public @NotNull List<CallNode> getCalls() {
         return calls;
+    }
+
+    @Override
+    public <R> @Nullable R visit(@NotNull NodeVisitor<R> visitor) {
+        return visitor.visitStreamExpressionNode(this);
     }
 
 

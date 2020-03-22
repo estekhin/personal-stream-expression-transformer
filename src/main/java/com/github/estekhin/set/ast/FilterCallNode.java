@@ -2,6 +2,7 @@ package com.github.estekhin.set.ast;
 
 import com.github.estekhin.set.ExpressionTypeException;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public final class FilterCallNode extends CallNode {
 
@@ -21,8 +22,8 @@ public final class FilterCallNode extends CallNode {
 
 
     @Override
-    public void visit(@NotNull CallNodeVisitor visitor) {
-        visitor.visitFilterCallNode(this);
+    public <R> @Nullable R visit(@NotNull NodeVisitor<R> visitor) {
+        return visitor.visitFilterCallNode(this);
     }
 
 

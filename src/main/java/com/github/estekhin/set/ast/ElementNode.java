@@ -1,6 +1,7 @@
 package com.github.estekhin.set.ast;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public final class ElementNode extends ExpressionNode {
 
@@ -13,8 +14,8 @@ public final class ElementNode extends ExpressionNode {
     }
 
     @Override
-    public @NotNull ExpressionNode transform(@NotNull ExpressionNodeTransformer transformer) {
-        return transformer.transformElementNode(this);
+    public <R> @Nullable R visit(@NotNull NodeVisitor<R> visitor) {
+        return visitor.visitElementNode(this);
     }
 
 
