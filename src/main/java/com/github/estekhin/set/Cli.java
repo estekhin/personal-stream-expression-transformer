@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import com.github.estekhin.set.ast.StreamExpressionNode;
+
 public final class Cli {
 
     public static void main(String[] args) throws IOException {
@@ -11,7 +13,9 @@ public final class Cli {
         String line = reader.readLine();
         while (line != null) {
             try {
-                System.out.println(new StreamExpressionTransformer().transform(line));
+                StreamExpressionNode sourceExpression = StreamExpression.parse(line);
+                StreamExpressionNode transformedExpression = StreamExpression.transform(sourceExpression);
+                System.out.println(StreamExpression.format(transformedExpression));
             } catch (ExpressionSyntaxException ignored) {
                 System.out.println("SYNTAX ERROR");
             } catch (ExpressionTypeException ignored) {

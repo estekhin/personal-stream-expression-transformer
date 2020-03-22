@@ -9,18 +9,18 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class StreamExpressionTransformerTest {
+class StreamExpressionTest {
 
     @ParameterizedTest
     @MethodSource("transformations")
     void transform(@NotNull String sourceExpression, @NotNull String transformedExpression) {
-        assertEquals(transformedExpression, new StreamExpressionTransformer().transform(sourceExpression));
+        assertEquals(transformedExpression, StreamExpression.format(StreamExpression.transform(StreamExpression.parse(sourceExpression))));
     }
 
     @ParameterizedTest
     @MethodSource("transformations")
     void transformAlreadyTransformed(@NotNull String sourceExpression, @NotNull String transformedExpression) {
-        assertEquals(transformedExpression, new StreamExpressionTransformer().transform(transformedExpression));
+        assertEquals(transformedExpression, StreamExpression.format(StreamExpression.transform(StreamExpression.parse(transformedExpression))));
     }
 
     static @NotNull Stream<Arguments> transformations() {

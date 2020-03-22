@@ -14,13 +14,13 @@ import com.github.estekhin.set.ast.NumberNode;
 import com.github.estekhin.set.ast.StreamExpressionNode;
 import org.jetbrains.annotations.NotNull;
 
-public final class StreamExpressionParser {
+final class StreamExpressionParser {
 
     private final @NotNull String source;
     private int index;
 
 
-    public StreamExpressionParser(@NotNull String source) {
+    StreamExpressionParser(@NotNull String source) {
         this.source = source;
     }
 
