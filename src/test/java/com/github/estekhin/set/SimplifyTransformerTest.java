@@ -2,6 +2,8 @@ package com.github.estekhin.set;
 
 import java.util.stream.Stream;
 
+import com.github.estekhin.set.ast.BinaryOperation;
+import com.github.estekhin.set.ast.BinaryOperationNode;
 import com.github.estekhin.set.ast.ElementNode;
 import com.github.estekhin.set.ast.ExpressionNode;
 import com.github.estekhin.set.ast.NumberNode;
@@ -30,6 +32,31 @@ class SimplifyTransformerTest {
                 Arguments.of(
                         new ElementNode(),
                         new ElementNode()
+                ),
+
+                Arguments.of(
+                        new BinaryOperationNode(
+                                new NumberNode(2),
+                                BinaryOperation.ADD,
+                                new NumberNode(3)
+                        ),
+                        new NumberNode(5)
+                ),
+                Arguments.of(
+                        new BinaryOperationNode(
+                                new NumberNode(2),
+                                BinaryOperation.SUBTRACT,
+                                new NumberNode(3)
+                        ),
+                        new NumberNode(-1)
+                ),
+                Arguments.of(
+                        new BinaryOperationNode(
+                                new NumberNode(2),
+                                BinaryOperation.MULTIPLY,
+                                new NumberNode(3)
+                        ),
+                        new NumberNode(6)
                 )
         );
     }

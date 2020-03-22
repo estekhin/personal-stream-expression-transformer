@@ -15,6 +15,10 @@ public final class NumberNode extends ExpressionNode {
     }
 
 
+    public long getValue() {
+        return value;
+    }
+
     @Override
     public @NotNull ExpressionType type() {
         return ExpressionType.INTEGER;
