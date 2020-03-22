@@ -15,7 +15,8 @@ public final class Cli {
             try {
                 StreamExpressionNode sourceExpression = StreamExpression.parse(line);
                 StreamExpressionNode transformedExpression = StreamExpression.transform(sourceExpression);
-                System.out.println(StreamExpression.format(transformedExpression));
+                StreamExpressionNode simplifiedExpression = StreamExpression.simplify(transformedExpression);
+                System.out.println(StreamExpression.format(simplifiedExpression));
             } catch (ExpressionSyntaxException ignored) {
                 System.out.println("SYNTAX ERROR");
             } catch (ExpressionTypeException ignored) {

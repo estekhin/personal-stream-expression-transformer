@@ -20,6 +20,10 @@ public final class StreamExpression {
         return Objects.requireNonNull(node.visit(new FilterMapTransformer()));
     }
 
+    public static @NotNull StreamExpressionNode simplify(@NotNull StreamExpressionNode node) {
+        return Objects.requireNonNull(node.visit(new SimplifyTransformer()));
+    }
+
 
     private StreamExpression() {
     }
