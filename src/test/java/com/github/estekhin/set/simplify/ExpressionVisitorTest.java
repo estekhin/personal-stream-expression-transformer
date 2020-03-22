@@ -638,9 +638,9 @@ class ExpressionVisitorTest {
                                 new NumberNode(2)
                         ),
                         new BinaryOperationNode(
-                                new NumberNode(3),
+                                new ElementNode(),
                                 BinaryOperation.ADD,
-                                new ElementNode()
+                                new NumberNode(3)
                         )
                 ),
                 Arguments.of(
@@ -654,9 +654,9 @@ class ExpressionVisitorTest {
                                 new NumberNode(2)
                         ),
                         new BinaryOperationNode(
-                                new NumberNode(-1),
+                                new ElementNode(),
                                 BinaryOperation.ADD,
-                                new ElementNode()
+                                new NumberNode(-1)
                         )
                 ),
                 Arguments.of(
@@ -737,6 +737,67 @@ class ExpressionVisitorTest {
                                 new NumberNode(-1),
                                 BinaryOperation.LESS_THAN,
                                 new ElementNode()
+                        )
+                ),
+                // ElementFirstTransformer
+                Arguments.of(
+                        new BinaryOperationNode(
+                                new NumberNode(1),
+                                BinaryOperation.ADD,
+                                new ElementNode()
+                        ),
+                        new BinaryOperationNode(
+                                new ElementNode(),
+                                BinaryOperation.ADD,
+                                new NumberNode(1)
+                        )
+                ),
+                Arguments.of(
+                        new BinaryOperationNode(
+                                new NumberNode(2),
+                                BinaryOperation.MULTIPLY,
+                                new ElementNode()
+                        ),
+                        new BinaryOperationNode(
+                                new ElementNode(),
+                                BinaryOperation.MULTIPLY,
+                                new NumberNode(2)
+                        )
+                ),
+                Arguments.of(
+                        new BinaryOperationNode(
+                                new NumberNode(2),
+                                BinaryOperation.EQUALS,
+                                new ElementNode()
+                        ),
+                        new BinaryOperationNode(
+                                new ElementNode(),
+                                BinaryOperation.EQUALS,
+                                new NumberNode(2)
+                        )
+                ),
+                Arguments.of(
+                        new BinaryOperationNode(
+                                new NumberNode(2),
+                                BinaryOperation.GREATER_THAN,
+                                new ElementNode()
+                        ),
+                        new BinaryOperationNode(
+                                new ElementNode(),
+                                BinaryOperation.LESS_THAN,
+                                new NumberNode(2)
+                        )
+                ),
+                Arguments.of(
+                        new BinaryOperationNode(
+                                new NumberNode(2),
+                                BinaryOperation.LESS_THAN,
+                                new ElementNode()
+                        ),
+                        new BinaryOperationNode(
+                                new ElementNode(),
+                                BinaryOperation.GREATER_THAN,
+                                new NumberNode(2)
                         )
                 ),
 
