@@ -13,14 +13,14 @@ class StreamExpressionTest {
 
     @ParameterizedTest
     @MethodSource("transformations")
-    void transform(@NotNull String sourceExpression, @NotNull String transformedExpression) {
-        assertEquals(transformedExpression, StreamExpression.format(StreamExpression.transform(StreamExpression.parse(sourceExpression))));
+    void process(@NotNull String sourceExpression, @NotNull String processedExpression) {
+        assertEquals(processedExpression, StreamExpression.process(sourceExpression));
     }
 
     @ParameterizedTest
     @MethodSource("transformations")
-    void transformAlreadyTransformed(@NotNull String sourceExpression, @NotNull String transformedExpression) {
-        assertEquals(transformedExpression, StreamExpression.format(StreamExpression.transform(StreamExpression.parse(transformedExpression))));
+    void processAlreadyProcessed(@NotNull String sourceExpression, @NotNull String processedExpression) {
+        assertEquals(processedExpression, StreamExpression.process(processedExpression));
     }
 
     static @NotNull Stream<Arguments> transformations() {

@@ -25,6 +25,14 @@ public final class StreamExpression {
     }
 
 
+    public static @NotNull String process(@NotNull String source) {
+        StreamExpressionNode sourceExpression = parse(source);
+        StreamExpressionNode transformedExpression = transform(sourceExpression);
+        StreamExpressionNode simplifiedExpression = simplify(transformedExpression);
+        return format(simplifiedExpression);
+    }
+
+
     private StreamExpression() {
     }
 
