@@ -55,6 +55,12 @@ public final class BinaryOperationNode extends ExpressionNode {
         return visitor.visitBinaryOperationNode(this);
     }
 
+    public @NotNull BinaryOperationNode updateOperands(@NotNull ExpressionNode updatedOperand1, @NotNull ExpressionNode updatedOperand2) {
+        return operand1.equals(updatedOperand1) && operand2.equals(updatedOperand2)
+                ? this
+                : new BinaryOperationNode(updatedOperand1, operation, updatedOperand2);
+    }
+
 
     @Override
     public int hashCode() {

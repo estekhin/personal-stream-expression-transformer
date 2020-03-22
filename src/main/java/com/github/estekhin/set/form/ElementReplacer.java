@@ -33,14 +33,7 @@ final class ElementReplacer implements NodeVisitor<ExpressionNode> {
     public @NotNull ExpressionNode visitBinaryOperationNode(@NotNull BinaryOperationNode node) {
         ExpressionNode transformedOperand1 = Objects.requireNonNull(node.getOperand1().visit(this));
         ExpressionNode transformedOperand2 = Objects.requireNonNull(node.getOperand2().visit(this));
-        if (transformedOperand1 == node.getOperand1() && transformedOperand2 == node.getOperand2()) {
-            return node;
-        }
-        return new BinaryOperationNode(
-                transformedOperand1,
-                node.getOperation(),
-                transformedOperand2
-        );
+        return node.updateOperands(transformedOperand1, transformedOperand2);
     }
 
 }

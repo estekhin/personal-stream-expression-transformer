@@ -6,7 +6,7 @@ import com.github.estekhin.set.ast.NodeVisitor;
 import com.github.estekhin.set.ast.StreamExpressionNode;
 import org.jetbrains.annotations.NotNull;
 
-public final class FormTransformer implements NodeVisitor<StreamExpressionNode> {
+public final class FormStreamExpressionTransformer implements NodeVisitor<StreamExpressionNode> {
 
     @Override
     public @NotNull StreamExpressionNode visitStreamExpressionNode(@NotNull StreamExpressionNode node) {

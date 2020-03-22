@@ -13,20 +13,28 @@ final class CallVisitor implements NodeVisitor<CallNode> {
 
     @Override
     public @NotNull CallNode visitFilterCallNode(@NotNull FilterCallNode node) {
-        ExpressionNode transformedOperand = Objects.requireNonNull(node.getOperand().visit(new ExpressionVisitor()));
-        if (transformedOperand == node.getOperand()) {
-            return node;
-        }
-        return new FilterCallNode(transformedOperand);
+        ExpressionNode transformedOperand = transform(node.getOperand());
+        return node.getOperand().equals(transformedOperand)
+                ? node
+                : new FilterCallNode(transformedOperand);
     }
 
     @Override
     public @NotNull CallNode visitMapCallNode(@NotNull MapCallNode node) {
-        ExpressionNode transformedOperand = Objects.requireNonNull(node.getOperand().visit(new ExpressionVisitor()));
-        if (transformedOperand == node.getOperand()) {
-            return node;
+        ExpressionNode transformedOperand = transform(node.getOperand());
+        return node.getOperand().equals(transformedOperand)
+                ? node
+                : new MapCallNode(transformedOperand);
+    }
+
+    private static @NotNull ExpressionNode transform(@NotNull ExpressionNode node) {
+        ExpressionNode previous = node;
+        ExpressionNode next = Objects.requireNonNull(previous.visit(new ExpressionVisitor()));
+        while (!next.equals(previous)) {
+            previous = next;
+            next = Objects.requireNonNull(previous.visit(new ExpressionVisitor()));
         }
-        return new MapCallNode(transformedOperand);
+        return next;
     }
 
 }

@@ -16,12 +16,12 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class FormTransformerTest {
+class FormStreamExpressionTransformerTest {
 
     @ParameterizedTest
     @MethodSource("transformations")
     void transformToFilterMapForm(@NotNull StreamExpressionNode source, @NotNull StreamExpressionNode expected) {
-        assertEquals(expected, source.visit(new FormTransformer()));
+        assertEquals(expected, source.visit(new FormStreamExpressionTransformer()));
     }
 
     static @NotNull Stream<Arguments> transformations() {

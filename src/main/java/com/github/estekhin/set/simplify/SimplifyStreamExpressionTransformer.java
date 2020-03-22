@@ -9,7 +9,7 @@ import com.github.estekhin.set.ast.NodeVisitor;
 import com.github.estekhin.set.ast.StreamExpressionNode;
 import org.jetbrains.annotations.NotNull;
 
-public final class SimplifyTransformer implements NodeVisitor<StreamExpressionNode> {
+public final class SimplifyStreamExpressionTransformer implements NodeVisitor<StreamExpressionNode> {
 
     @Override
     public @NotNull StreamExpressionNode visitStreamExpressionNode(@NotNull StreamExpressionNode node) {
