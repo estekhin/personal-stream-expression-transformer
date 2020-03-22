@@ -355,8 +355,6 @@ class ExpressionVisitorTest {
                                 new NumberNode(3)
                         )
                 ),
-
-
                 Arguments.of(
                         new BinaryOperationNode(
                                 new BinaryOperationNode(
@@ -405,6 +403,121 @@ class ExpressionVisitorTest {
                                 new NumberNode(3)
                         )
                 ),
+
+
+                Arguments.of(
+                        new BinaryOperationNode(
+                                new NumberNode(2),
+                                BinaryOperation.ADD,
+                                new BinaryOperationNode(
+                                        new NumberNode(1),
+                                        BinaryOperation.ADD,
+                                        new ElementNode()
+                                )
+                        ),
+                        new BinaryOperationNode(
+                                new NumberNode(3),
+                                BinaryOperation.ADD,
+                                new ElementNode()
+                        )
+                ),
+                Arguments.of(
+                        new BinaryOperationNode(
+                                new NumberNode(2),
+                                BinaryOperation.SUBTRACT,
+                                new BinaryOperationNode(
+                                        new NumberNode(1),
+                                        BinaryOperation.ADD,
+                                        new ElementNode()
+                                )
+                        ),
+                        new BinaryOperationNode(
+                                new NumberNode(1),
+                                BinaryOperation.SUBTRACT,
+                                new ElementNode()
+                        )
+                ),
+                Arguments.of(
+                        new BinaryOperationNode(
+                                new NumberNode(2),
+                                BinaryOperation.ADD,
+                                new BinaryOperationNode(
+                                        new NumberNode(1),
+                                        BinaryOperation.SUBTRACT,
+                                        new ElementNode()
+                                )
+                        ),
+                        new BinaryOperationNode(
+                                new NumberNode(3),
+                                BinaryOperation.SUBTRACT,
+                                new ElementNode()
+                        )
+                ),
+                Arguments.of(
+                        new BinaryOperationNode(
+                                new BinaryOperationNode(
+                                        new ElementNode(),
+                                        BinaryOperation.SUBTRACT,
+                                        new NumberNode(1)
+                                ),
+                                BinaryOperation.SUBTRACT,
+                                new NumberNode(2)
+                        ),
+                        new BinaryOperationNode(
+                                new ElementNode(),
+                                BinaryOperation.SUBTRACT,
+                                new NumberNode(3)
+                        )
+                ),
+                Arguments.of(
+                        new BinaryOperationNode(
+                                new BinaryOperationNode(
+                                        new ElementNode(),
+                                        BinaryOperation.ADD,
+                                        new NumberNode(1)
+                                ),
+                                BinaryOperation.EQUALS,
+                                new NumberNode(2)
+                        ),
+                        new BinaryOperationNode(
+                                new ElementNode(),
+                                BinaryOperation.EQUALS,
+                                new NumberNode(1)
+                        )
+                ),
+                Arguments.of(
+                        new BinaryOperationNode(
+                                new BinaryOperationNode(
+                                        new ElementNode(),
+                                        BinaryOperation.SUBTRACT,
+                                        new NumberNode(1)
+                                ),
+                                BinaryOperation.GREATER_THAN,
+                                new NumberNode(2)
+                        ),
+                        new BinaryOperationNode(
+                                new ElementNode(),
+                                BinaryOperation.GREATER_THAN,
+                                new NumberNode(3)
+                        )
+                ),
+                Arguments.of(
+                        new BinaryOperationNode(
+                                new BinaryOperationNode(
+                                        new ElementNode(),
+                                        BinaryOperation.SUBTRACT,
+                                        new NumberNode(1)
+                                ),
+                                BinaryOperation.LESS_THAN,
+                                new NumberNode(2)
+                        ),
+                        new BinaryOperationNode(
+                                new ElementNode(),
+                                BinaryOperation.LESS_THAN,
+                                new NumberNode(3)
+                        )
+                ),
+
 
                 // no-op
                 Arguments.of(

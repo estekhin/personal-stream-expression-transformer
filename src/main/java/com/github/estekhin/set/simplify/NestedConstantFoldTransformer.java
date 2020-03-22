@@ -14,6 +14,33 @@ final class NestedConstantFoldTransformer extends NestedBinaryOperationWithNumbe
             @NotNull NumberNode number2, @NotNull BinaryOperation operation2,
             @NotNull NumberNode number1, @NotNull BinaryOperation operation1, @NotNull ExpressionNode otherOperand
     ) {
+        if (operation1 != BinaryOperation.ADD && operation1 != BinaryOperation.SUBTRACT) {
+            return null;
+        }
+        if (operation2 == BinaryOperation.ADD) {
+            return new BinaryOperationNode(
+                    new NumberNode(Math.addExact(number2.getValue(), number1.getValue())),
+                    operation1,
+                    otherOperand
+            );
+        } else if (operation2 == BinaryOperation.SUBTRACT) {
+            return new BinaryOperationNode(
+                    new NumberNode(Math.subtractExact(number2.getValue(), number1.getValue())),
+                    BinaryOperation.SUBTRACT,
+                    otherOperand
+            );
+        } else {
+            if (operation2 == BinaryOperation.EQUALS || operation2 == BinaryOperation.GREATER_THAN || operation2 == BinaryOperation.LESS_THAN) {
+                return new BinaryOperationNode(
+                        new NumberNode(operation1 == BinaryOperation.ADD
+                                ? Math.subtractExact(number2.getValue(), number1.getValue())
+                                : Math.addExact(number2.getValue(), number1.getValue())
+                        ),
+                        operation2,
+                        otherOperand
+                );
+            }
+        }
         return null;
     }
 
