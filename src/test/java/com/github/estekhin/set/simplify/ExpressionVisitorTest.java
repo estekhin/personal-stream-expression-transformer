@@ -34,7 +34,7 @@ class ExpressionVisitorTest {
                         new ElementNode()
                 ),
 
-                // SimpleConstantFoldBinaryOperationTransformer
+                // SimpleConstantFoldTransformer
                 Arguments.of(
                         new BinaryOperationNode(
                                 new NumberNode(2),
@@ -59,8 +59,104 @@ class ExpressionVisitorTest {
                         ),
                         new NumberNode(6)
                 ),
+                Arguments.of(
+                        new BinaryOperationNode(
+                                new NumberNode(2),
+                                BinaryOperation.EQUALS,
+                                new NumberNode(3)
+                        ),
+                        new BinaryOperationNode(
+                                new NumberNode(1),
+                                BinaryOperation.EQUALS,
+                                new NumberNode(0)
+                        )
+                ),
+                Arguments.of(
+                        new BinaryOperationNode(
+                                new NumberNode(2),
+                                BinaryOperation.GREATER_THAN,
+                                new NumberNode(3)
+                        ),
+                        new BinaryOperationNode(
+                                new NumberNode(1),
+                                BinaryOperation.EQUALS,
+                                new NumberNode(0)
+                        )
+                ),
+                Arguments.of(
+                        new BinaryOperationNode(
+                                new NumberNode(2),
+                                BinaryOperation.LESS_THAN,
+                                new NumberNode(3)
+                        ),
+                        new BinaryOperationNode(
+                                new NumberNode(1),
+                                BinaryOperation.EQUALS,
+                                new NumberNode(1)
+                        )
+                ),
 
-                // NegativeConstantBinaryOperationTransformer
+                // ZeroConstantTransformer
+                Arguments.of(
+                        new BinaryOperationNode(
+                                new ElementNode(),
+                                BinaryOperation.ADD,
+                                new NumberNode(0)
+                        ),
+                        new ElementNode()
+                ),
+                Arguments.of(
+                        new BinaryOperationNode(
+                                new ElementNode(),
+                                BinaryOperation.SUBTRACT,
+                                new NumberNode(0)
+                        ),
+                        new ElementNode()
+                ),
+                Arguments.of(
+                        new BinaryOperationNode(
+                                new ElementNode(),
+                                BinaryOperation.MULTIPLY,
+                                new NumberNode(0)
+                        ),
+                        new NumberNode(0)
+                ),
+                Arguments.of(
+                        new BinaryOperationNode(
+                                new NumberNode(0),
+                                BinaryOperation.ADD,
+                                new ElementNode()
+                        ),
+                        new ElementNode()
+                ),
+                Arguments.of(
+                        new BinaryOperationNode(
+                                new NumberNode(0),
+                                BinaryOperation.MULTIPLY,
+                                new ElementNode()
+                        ),
+                        new NumberNode(0)
+                ),
+
+                // OneConstantTransformer
+                Arguments.of(
+                        new BinaryOperationNode(
+                                new ElementNode(),
+                                BinaryOperation.MULTIPLY,
+                                new NumberNode(1)
+                        ),
+                        new ElementNode()
+                ),
+                Arguments.of(
+                        new BinaryOperationNode(
+                                new NumberNode(1),
+                                BinaryOperation.MULTIPLY,
+                                new ElementNode()
+                        ),
+                        new ElementNode()
+                ),
+
+                // NegativeConstantTransformer
                 Arguments.of(
                         new BinaryOperationNode(
                                 new ElementNode(),
