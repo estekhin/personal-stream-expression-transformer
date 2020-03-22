@@ -21,6 +21,12 @@ public final class MapCallNode extends CallNode {
 
 
     @Override
+    public void visit(@NotNull CallNodeVisitor visitor) {
+        visitor.visitMapCallNode(this);
+    }
+
+
+    @Override
     public @NotNull String toString() {
         return MAP_START + operand + MAP_END;
     }

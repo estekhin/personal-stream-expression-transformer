@@ -16,6 +16,8 @@ public abstract class CallNode extends Node {
         return operand;
     }
 
+    public abstract void visit(@NotNull CallNodeVisitor visitor);
+
 
     @Override
     public int hashCode() {

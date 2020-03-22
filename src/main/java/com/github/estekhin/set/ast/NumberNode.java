@@ -20,8 +20,8 @@ public final class NumberNode extends ExpressionNode {
     }
 
     @Override
-    public @NotNull ExpressionNode replaceElement(@NotNull ExpressionNode replacement) {
-        return this;
+    public @NotNull ExpressionNode transform(@NotNull ExpressionNodeTransformer transformer) {
+        return transformer.transformNumberNode(this);
     }
 
 

@@ -32,18 +32,26 @@ public final class BinaryOperationNode extends ExpressionNode {
     }
 
 
+    public @NotNull ExpressionNode getOperand1() {
+        return operand1;
+    }
+
+    public @NotNull BinaryOperation getOperation() {
+        return operation;
+    }
+
+    public @NotNull ExpressionNode getOperand2() {
+        return operand2;
+    }
+
     @Override
     public @NotNull ExpressionType type() {
         return operation.getResultType();
     }
 
     @Override
-    public @NotNull ExpressionNode replaceElement(@NotNull ExpressionNode replacement) {
-        return new BinaryOperationNode(
-                operand1.replaceElement(replacement),
-                operation,
-                operand2.replaceElement(replacement)
-        );
+    public @NotNull ExpressionNode transform(@NotNull ExpressionNodeTransformer transformer) {
+        return transformer.transformBinaryOperationNode(this);
     }
 
 

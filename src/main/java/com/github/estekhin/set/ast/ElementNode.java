@@ -13,8 +13,8 @@ public final class ElementNode extends ExpressionNode {
     }
 
     @Override
-    public @NotNull ExpressionNode replaceElement(@NotNull ExpressionNode replacement) {
-        return replacement;
+    public @NotNull ExpressionNode transform(@NotNull ExpressionNodeTransformer transformer) {
+        return transformer.transformElementNode(this);
     }
 
 

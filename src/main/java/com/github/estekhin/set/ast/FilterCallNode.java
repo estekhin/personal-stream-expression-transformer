@@ -21,6 +21,12 @@ public final class FilterCallNode extends CallNode {
 
 
     @Override
+    public void visit(@NotNull CallNodeVisitor visitor) {
+        visitor.visitFilterCallNode(this);
+    }
+
+
+    @Override
     public @NotNull String toString() {
         return FILTER_START + operand + FILTER_END;
     }

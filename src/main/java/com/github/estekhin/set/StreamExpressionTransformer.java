@@ -1,12 +1,12 @@
 package com.github.estekhin.set;
 
-import java.util.List;
-
 import com.github.estekhin.set.ast.BinaryOperation;
 import com.github.estekhin.set.ast.BinaryOperationNode;
 import com.github.estekhin.set.ast.CallNode;
+import com.github.estekhin.set.ast.CallNodeVisitor;
 import com.github.estekhin.set.ast.ElementNode;
 import com.github.estekhin.set.ast.ExpressionNode;
+import com.github.estekhin.set.ast.ExpressionNodeTransformer;
 import com.github.estekhin.set.ast.FilterCallNode;
 import com.github.estekhin.set.ast.MapCallNode;
 import com.github.estekhin.set.ast.NumberNode;
@@ -21,43 +21,69 @@ public class StreamExpressionTransformer {
     }
 
     private @NotNull StreamExpressionNode process(@NotNull StreamExpressionNode streamExpression) {
-        ExpressionNode filterOperand = null;
-        ExpressionNode mapOperand = new ElementNode();
+        FilterMapTransformer filterMapTransformer = new FilterMapTransformer();
         for (CallNode call : streamExpression.getCalls()) {
-            if (call instanceof FilterCallNode) {
-                filterOperand = appendFilter(filterOperand, mapOperand, call.getOperand());
-            } else if (call instanceof MapCallNode) {
-                mapOperand = appendMap(mapOperand, call.getOperand());
-            } else {
-                throw new IllegalStateException("unexpected CallNode: " + call);
-            }
+            call.visit(filterMapTransformer);
         }
-        if (filterOperand == null) {
-            filterOperand = new BinaryOperationNode(new NumberNode(1), BinaryOperation.EQUALS, new NumberNode(1));
-        }
-        return new StreamExpressionNode(List.of(
-                new FilterCallNode(filterOperand),
-                new MapCallNode(mapOperand)
-        ));
+        return filterMapTransformer.create();
     }
 
-    private @NotNull ExpressionNode appendFilter(
-            @Nullable ExpressionNode currentFilterOperand, @NotNull ExpressionNode currentMapOperand,
-            @NotNull ExpressionNode newFilterOperand
-    ) {
-        newFilterOperand = newFilterOperand.replaceElement(currentMapOperand);
-        if (currentFilterOperand == null) {
-            return newFilterOperand;
-        } else {
-            return new BinaryOperationNode(currentFilterOperand, BinaryOperation.AND, newFilterOperand);
+    private static final class FilterMapTransformer implements CallNodeVisitor {
+
+        private @Nullable ExpressionNode filterOperandCollector;
+        private @Nullable ExpressionNode mapOperandCollector;
+
+        @Override
+        public void visitFilterCallNode(@NotNull FilterCallNode node) {
+            filterOperandCollector = applyCurrentFilter(applyCurrentMap(node.getOperand()));
         }
+
+        @Override
+        public void visitMapCallNode(@NotNull MapCallNode node) {
+            mapOperandCollector = applyCurrentMap(node.getOperand());
+        }
+
+        private @NotNull ExpressionNode applyCurrentFilter(@NotNull ExpressionNode node) {
+            return filterOperandCollector != null
+                    ? new BinaryOperationNode(filterOperandCollector, BinaryOperation.AND, node)
+                    : node;
+        }
+
+        private @NotNull ExpressionNode applyCurrentMap(@NotNull ExpressionNode node) {
+            return mapOperandCollector != null
+                    ? node.transform(new ElementReplacer(mapOperandCollector))
+                    : node;
+        }
+
+        public @NotNull StreamExpressionNode create() {
+            return new StreamExpressionNode(
+                    new FilterCallNode(filterOperandCollector != null
+                            ? filterOperandCollector
+                            : new BinaryOperationNode(new NumberNode(1), BinaryOperation.EQUALS, new NumberNode(1))
+                    ),
+                    new MapCallNode(mapOperandCollector != null
+                            ? mapOperandCollector
+                            : new ElementNode()
+                    )
+            );
+        }
+
     }
 
-    private @NotNull ExpressionNode appendMap(
-            @NotNull ExpressionNode currentMapOperand,
-            @NotNull ExpressionNode newMapOperand
-    ) {
-        return newMapOperand.replaceElement(currentMapOperand);
+    private static final class ElementReplacer implements ExpressionNodeTransformer {
+
+        private final @NotNull ExpressionNode replacement;
+
+
+        ElementReplacer(@NotNull ExpressionNode replacement) {
+            this.replacement = replacement;
+        }
+
+        @Override
+        public @NotNull ExpressionNode transformElementNode(@NotNull ElementNode node) {
+            return replacement;
+        }
+
     }
 
 }
