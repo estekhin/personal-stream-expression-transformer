@@ -1,14 +1,9 @@
-package com.github.estekhin.set;
+package com.github.estekhin.set.ast;
 
 import java.util.stream.Stream;
 
-import com.github.estekhin.set.ast.BinaryOperation;
-import com.github.estekhin.set.ast.BinaryOperationNode;
-import com.github.estekhin.set.ast.ElementNode;
-import com.github.estekhin.set.ast.FilterCallNode;
-import com.github.estekhin.set.ast.MapCallNode;
-import com.github.estekhin.set.ast.NumberNode;
-import com.github.estekhin.set.ast.StreamExpressionNode;
+import com.github.estekhin.set.ExpressionSyntaxException;
+import com.github.estekhin.set.ExpressionTypeException;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;

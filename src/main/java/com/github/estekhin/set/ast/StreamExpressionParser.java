@@ -1,26 +1,18 @@
-package com.github.estekhin.set;
+package com.github.estekhin.set.ast;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.github.estekhin.set.ast.BinaryOperation;
-import com.github.estekhin.set.ast.BinaryOperationNode;
-import com.github.estekhin.set.ast.CallNode;
-import com.github.estekhin.set.ast.ElementNode;
-import com.github.estekhin.set.ast.ExpressionNode;
-import com.github.estekhin.set.ast.FilterCallNode;
-import com.github.estekhin.set.ast.MapCallNode;
-import com.github.estekhin.set.ast.NumberNode;
-import com.github.estekhin.set.ast.StreamExpressionNode;
+import com.github.estekhin.set.ExpressionSyntaxException;
 import org.jetbrains.annotations.NotNull;
 
-final class StreamExpressionParser {
+public final class StreamExpressionParser {
 
     private final @NotNull String source;
     private int index;
 
 
-    StreamExpressionParser(@NotNull String source) {
+    public StreamExpressionParser(@NotNull String source) {
         this.source = source;
     }
 

@@ -1,4 +1,4 @@
-package com.github.estekhin.set;
+package com.github.estekhin.set.simplify;
 
 import java.util.stream.Stream;
 
@@ -14,12 +14,12 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class SimplifyTransformerTest {
+class ExpressionVisitorTest {
 
     @ParameterizedTest
     @MethodSource("expressions")
     void simplifyExpressions(@NotNull ExpressionNode source, @NotNull ExpressionNode expected) {
-        assertEquals(expected, source.visit(new SimplifyTransformer.ExpressionVisitor()));
+        assertEquals(expected, source.visit(new ExpressionVisitor()));
     }
 
 

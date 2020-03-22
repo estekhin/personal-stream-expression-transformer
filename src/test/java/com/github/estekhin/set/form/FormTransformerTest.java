@@ -1,4 +1,4 @@
-package com.github.estekhin.set;
+package com.github.estekhin.set.form;
 
 import java.util.stream.Stream;
 
@@ -16,12 +16,12 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class FilterMapTransformerTest {
+class FormTransformerTest {
 
     @ParameterizedTest
     @MethodSource("transformations")
     void transformToFilterMapForm(@NotNull StreamExpressionNode source, @NotNull StreamExpressionNode expected) {
-        assertEquals(expected, source.visit(new FilterMapTransformer()));
+        assertEquals(expected, source.visit(new FormTransformer()));
     }
 
     static @NotNull Stream<Arguments> transformations() {

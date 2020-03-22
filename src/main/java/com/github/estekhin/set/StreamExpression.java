@@ -3,6 +3,9 @@ package com.github.estekhin.set;
 import java.util.Objects;
 
 import com.github.estekhin.set.ast.StreamExpressionNode;
+import com.github.estekhin.set.ast.StreamExpressionParser;
+import com.github.estekhin.set.form.FormTransformer;
+import com.github.estekhin.set.simplify.SimplifyTransformer;
 import org.jetbrains.annotations.NotNull;
 
 public final class StreamExpression {
@@ -17,7 +20,7 @@ public final class StreamExpression {
 
 
     public static @NotNull StreamExpressionNode transform(@NotNull StreamExpressionNode node) {
-        return Objects.requireNonNull(node.visit(new FilterMapTransformer()));
+        return Objects.requireNonNull(node.visit(new FormTransformer()));
     }
 
     public static @NotNull StreamExpressionNode simplify(@NotNull StreamExpressionNode node) {
