@@ -9,6 +9,21 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import static com.github.estekhin.set.ast.BinaryOperation.ADD;
+import static com.github.estekhin.set.ast.BinaryOperation.AND;
+import static com.github.estekhin.set.ast.BinaryOperation.EQUALS;
+import static com.github.estekhin.set.ast.BinaryOperation.GREATER_THAN;
+import static com.github.estekhin.set.ast.BinaryOperation.LESS_THAN;
+import static com.github.estekhin.set.ast.BinaryOperation.MULTIPLY;
+import static com.github.estekhin.set.ast.BinaryOperation.OR;
+import static com.github.estekhin.set.ast.BinaryOperation.SUBTRACT;
+import static com.github.estekhin.set.ast.Nodes.bool;
+import static com.github.estekhin.set.ast.Nodes.element;
+import static com.github.estekhin.set.ast.Nodes.expression;
+import static com.github.estekhin.set.ast.Nodes.filter;
+import static com.github.estekhin.set.ast.Nodes.map;
+import static com.github.estekhin.set.ast.Nodes.number;
+import static com.github.estekhin.set.ast.Nodes.op;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -30,372 +45,186 @@ class StreamExpressionParserTest {
         return Stream.of(
                 Arguments.of(
                         "filter{(1=1)}",
-                        new StreamExpressionNode(
-                                new FilterCallNode(
-                                        new BooleanNode(true)
-                                )
+                        expression(
+                                filter(bool(true))
                         )
                 ),
                 Arguments.of(
                         "filter{(1=0)}",
-                        new StreamExpressionNode(
-                                new FilterCallNode(
-                                        new BooleanNode(false)
-                                )
+                        expression(
+                                filter(bool(false))
                         )
                 ),
                 Arguments.of(
                         "filter{(1>2)}",
-                        new StreamExpressionNode(
-                                new FilterCallNode(new BinaryOperationNode(
-                                        new NumberNode(1),
-                                        BinaryOperation.GREATER_THAN,
-                                        new NumberNode(2)
-                                ))
+                        expression(
+                                filter(op(number(1), GREATER_THAN, number(2)))
                         )
                 ),
                 Arguments.of(
                         "filter{(1<2)}",
-                        new StreamExpressionNode(
-                                new FilterCallNode(new BinaryOperationNode(
-                                        new NumberNode(1),
-                                        BinaryOperation.LESS_THAN,
-                                        new NumberNode(2)
-                                ))
+                        expression(
+                                filter(op(number(1), LESS_THAN, number(2)))
                         )
                 ),
                 Arguments.of(
                         "filter{((1<2)&(3>4))}",
-                        new StreamExpressionNode(
-                                new FilterCallNode(new BinaryOperationNode(
-                                        new BinaryOperationNode(
-                                                new NumberNode(1),
-                                                BinaryOperation.LESS_THAN,
-                                                new NumberNode(2)
-                                        ),
-                                        BinaryOperation.AND,
-                                        new BinaryOperationNode(
-                                                new NumberNode(3),
-                                                BinaryOperation.GREATER_THAN,
-                                                new NumberNode(4)
-                                        )
-                                ))
+                        expression(
+                                filter(op(op(number(1), LESS_THAN, number(2)), AND, op(number(3), GREATER_THAN, number(4))))
                         )
                 ),
                 Arguments.of(
                         "filter{((1<2)|(3>4))}",
-                        new StreamExpressionNode(
-                                new FilterCallNode(new BinaryOperationNode(
-                                        new BinaryOperationNode(
-                                                new NumberNode(1),
-                                                BinaryOperation.LESS_THAN,
-                                                new NumberNode(2)
-                                        ),
-                                        BinaryOperation.OR,
-                                        new BinaryOperationNode(
-                                                new NumberNode(3),
-                                                BinaryOperation.GREATER_THAN,
-                                                new NumberNode(4)
-                                        )
-                                ))
+                        expression(
+                                filter(op(op(number(1), LESS_THAN, number(2)), OR, op(number(3), GREATER_THAN, number(4))))
                         )
                 ),
                 Arguments.of(
                         "filter{(element>1)}",
-                        new StreamExpressionNode(
-                                new FilterCallNode(new BinaryOperationNode(
-                                        new ElementNode(),
-                                        BinaryOperation.GREATER_THAN,
-                                        new NumberNode(1)
-                                ))
+                        expression(
+                                filter(op(element(), GREATER_THAN, number(1)))
                         )
                 ),
                 Arguments.of(
                         "filter{(1>element)}",
-                        new StreamExpressionNode(
-                                new FilterCallNode(new BinaryOperationNode(
-                                        new NumberNode(1),
-                                        BinaryOperation.GREATER_THAN,
-                                        new ElementNode()
-                                ))
+                        expression(
+                                filter(op(number(1), GREATER_THAN, element()))
                         )
                 ),
                 Arguments.of(
                         "filter{(((element>1)&(element<2))|(element=3))}",
-                        new StreamExpressionNode(
-                                new FilterCallNode(new BinaryOperationNode(
-                                        new BinaryOperationNode(
-                                                new BinaryOperationNode(
-                                                        new ElementNode(),
-                                                        BinaryOperation.GREATER_THAN,
-                                                        new NumberNode(1)
-                                                ),
-                                                BinaryOperation.AND,
-                                                new BinaryOperationNode(
-                                                        new ElementNode(),
-                                                        BinaryOperation.LESS_THAN,
-                                                        new NumberNode(2)
-                                                )
-                                        ),
-                                        BinaryOperation.OR,
-                                        new BinaryOperationNode(
-                                                new ElementNode(),
-                                                BinaryOperation.EQUALS,
-                                                new NumberNode(3)
-                                        )
-                                ))
+                        expression(
+                                filter(op(op(op(element(), GREATER_THAN, number(1)), AND, op(element(), LESS_THAN, number(2))), OR, op(element(), EQUALS, number(3))))
                         )
                 ),
                 Arguments.of(
                         "filter{(-1>-2)}",
-                        new StreamExpressionNode(
-                                new FilterCallNode(new BinaryOperationNode(
-                                        new NumberNode(-1),
-                                        BinaryOperation.GREATER_THAN,
-                                        new NumberNode(-2)
-                                ))
+                        expression(
+                                filter(op(number(-1), GREATER_THAN, number(-2)))
                         )
                 ),
 
                 Arguments.of(
                         "map{1}",
-                        new StreamExpressionNode(
-                                new MapCallNode(
-                                        new NumberNode(1)
-                                )
+                        expression(
+                                map(number(1))
                         )
                 ),
                 Arguments.of(
                         "map{-1}",
-                        new StreamExpressionNode(
-                                new MapCallNode(
-                                        new NumberNode(-1)
-                                )
+                        expression(
+                                map(number(-1))
                         )
                 ),
                 Arguments.of(
                         "map{(1+2)}",
-                        new StreamExpressionNode(
-                                new MapCallNode(new BinaryOperationNode(
-                                        new NumberNode(1),
-                                        BinaryOperation.ADD,
-                                        new NumberNode(2)
-                                ))
+                        expression(
+                                map(op(number(1), ADD, number(2)))
                         )
                 ),
                 Arguments.of(
                         "map{(1-2)}",
-                        new StreamExpressionNode(
-                                new MapCallNode(new BinaryOperationNode(
-                                        new NumberNode(1),
-                                        BinaryOperation.SUBTRACT,
-                                        new NumberNode(2)
-                                ))
+                        expression(
+                                map(op(number(1), SUBTRACT, number(2)))
                         )
                 ),
                 Arguments.of(
                         "map{(1*2)}",
-                        new StreamExpressionNode(
-                                new MapCallNode(new BinaryOperationNode(
-                                        new NumberNode(1),
-                                        BinaryOperation.MULTIPLY,
-                                        new NumberNode(2)
-                                ))
+                        expression(
+                                map(op(number(1), MULTIPLY, number(2)))
                         )
                 ),
                 Arguments.of(
                         "map{((1+2)*(3-4))}",
-                        new StreamExpressionNode(
-                                new MapCallNode(new BinaryOperationNode(
-                                        new BinaryOperationNode(
-                                                new NumberNode(1),
-                                                BinaryOperation.ADD,
-                                                new NumberNode(2)
-                                        ),
-                                        BinaryOperation.MULTIPLY,
-                                        new BinaryOperationNode(
-                                                new NumberNode(3),
-                                                BinaryOperation.SUBTRACT,
-                                                new NumberNode(4)
-                                        )
-                                ))
+                        expression(
+                                map(op(op(number(1), ADD, number(2)), MULTIPLY, op(number(3), SUBTRACT, number(4))))
                         )
                 ),
                 Arguments.of(
                         "map{element}",
-                        new StreamExpressionNode(
-                                new MapCallNode(
-                                        new ElementNode()
-                                )
+                        expression(
+                                map(element())
                         )
                 ),
                 Arguments.of(
                         "map{(element+1)}",
-                        new StreamExpressionNode(
-                                new MapCallNode(new BinaryOperationNode(
-                                        new ElementNode(),
-                                        BinaryOperation.ADD,
-                                        new NumberNode(1)
-                                ))
+                        expression(
+                                map(op(element(), ADD, number(1)))
                         )
                 ),
                 Arguments.of(
                         "map{(1+element)}",
-                        new StreamExpressionNode(
-                                new MapCallNode(new BinaryOperationNode(
-                                        new NumberNode(1),
-                                        BinaryOperation.ADD,
-                                        new ElementNode()
-                                ))
+                        expression(
+                                map(op(number(1), ADD, element()))
                         )
                 ),
                 Arguments.of(
                         "map{(element--1)}",
-                        new StreamExpressionNode(
-                                new MapCallNode(new BinaryOperationNode(
-                                        new ElementNode(),
-                                        BinaryOperation.SUBTRACT,
-                                        new NumberNode(-1)
-                                ))
+                        expression(
+                                map(op(element(), SUBTRACT, number(-1)))
                         )
                 ),
                 Arguments.of(
                         "map{(-1-element)}",
-                        new StreamExpressionNode(
-                                new MapCallNode(new BinaryOperationNode(
-                                        new NumberNode(-1),
-                                        BinaryOperation.SUBTRACT,
-                                        new ElementNode()
-                                ))
+                        expression(
+                                map(op(number(-1), SUBTRACT, element()))
                         )
                 ),
                 Arguments.of(
                         "map{(element+element)}",
-                        new StreamExpressionNode(
-                                new MapCallNode(new BinaryOperationNode(
-                                        new ElementNode(),
-                                        BinaryOperation.ADD,
-                                        new ElementNode()
-                                ))
+                        expression(
+                                map(op(element(), ADD, element()))
                         )
                 ),
                 Arguments.of(
                         "map{((element+(element-1))*(element+element))}",
-                        new StreamExpressionNode(
-                                new MapCallNode(new BinaryOperationNode(
-                                        new BinaryOperationNode(
-                                                new ElementNode(),
-                                                BinaryOperation.ADD,
-                                                new BinaryOperationNode(
-                                                        new ElementNode(),
-                                                        BinaryOperation.SUBTRACT,
-                                                        new NumberNode(1)
-                                                )
-                                        ),
-                                        BinaryOperation.MULTIPLY,
-                                        new BinaryOperationNode(
-                                                new ElementNode(),
-                                                BinaryOperation.ADD,
-                                                new ElementNode()
-                                        )
-                                ))
+                        expression(
+                                map(op(op(element(), ADD, op(element(), SUBTRACT, number(1))), MULTIPLY, op(element(), ADD, element())))
                         )
                 ),
                 Arguments.of(
                         "map{(-1+-2)}",
-                        new StreamExpressionNode(
-                                new MapCallNode(new BinaryOperationNode(
-                                        new NumberNode(-1),
-                                        BinaryOperation.ADD,
-                                        new NumberNode(-2)
-                                ))
+                        expression(
+                                map(op(number(-1), ADD, number(-2)))
                         )
                 ),
                 Arguments.of(
                         "map{(-1--2)}",
-                        new StreamExpressionNode(
-                                new MapCallNode(new BinaryOperationNode(
-                                        new NumberNode(-1),
-                                        BinaryOperation.SUBTRACT,
-                                        new NumberNode(-2)
-                                ))
+                        expression(
+                                map(op(number(-1), SUBTRACT, number(-2)))
                         )
                 ),
                 Arguments.of(
                         "map{(-1*-2)}",
-                        new StreamExpressionNode(
-                                new MapCallNode(new BinaryOperationNode(
-                                        new NumberNode(-1),
-                                        BinaryOperation.MULTIPLY,
-                                        new NumberNode(-2)
-                                ))
+                        expression(
+                                map(op(number(-1), MULTIPLY, number(-2)))
                         )
                 ),
 
                 Arguments.of(
                         "filter{(element>1)}%>%map{(element+2)}",
-                        new StreamExpressionNode(
-                                new FilterCallNode(new BinaryOperationNode(
-                                        new ElementNode(),
-                                        BinaryOperation.GREATER_THAN,
-                                        new NumberNode(1)
-                                )),
-                                new MapCallNode(new BinaryOperationNode(
-                                        new ElementNode(),
-                                        BinaryOperation.ADD,
-                                        new NumberNode(2)
-                                ))
+                        expression(
+                                filter(op(element(), GREATER_THAN, number(1))),
+                                map(op(element(), ADD, number(2)))
                         )
                 ),
                 Arguments.of(
                         "map{(element+1)}%>%filter{(element>2)}",
-                        new StreamExpressionNode(
-                                new MapCallNode(new BinaryOperationNode(
-                                        new ElementNode(),
-                                        BinaryOperation.ADD,
-                                        new NumberNode(1)
-                                )),
-                                new FilterCallNode(new BinaryOperationNode(
-                                        new ElementNode(),
-                                        BinaryOperation.GREATER_THAN,
-                                        new NumberNode(2)
-                                ))
+                        expression(
+                                map(op(element(), ADD, number(1))),
+                                filter(op(element(), GREATER_THAN, number(2)))
                         )
                 ),
 
                 Arguments.of(
                         "filter{(element>1)}%>%map{(element+2)}%>%filter{(element<3)}%>%map{(element-4)}%>%filter{(element=5)}%>%map{(element*6)}",
-                        new StreamExpressionNode(
-                                new FilterCallNode(new BinaryOperationNode(
-                                        new ElementNode(),
-                                        BinaryOperation.GREATER_THAN,
-                                        new NumberNode(1)
-                                )),
-                                new MapCallNode(new BinaryOperationNode(
-                                        new ElementNode(),
-                                        BinaryOperation.ADD,
-                                        new NumberNode(2)
-                                )),
-                                new FilterCallNode(new BinaryOperationNode(
-                                        new ElementNode(),
-                                        BinaryOperation.LESS_THAN,
-                                        new NumberNode(3)
-                                )),
-                                new MapCallNode(new BinaryOperationNode(
-                                        new ElementNode(),
-                                        BinaryOperation.SUBTRACT,
-                                        new NumberNode(4)
-                                )),
-                                new FilterCallNode(new BinaryOperationNode(
-                                        new ElementNode(),
-                                        BinaryOperation.EQUALS,
-                                        new NumberNode(5)
-                                )),
-                                new MapCallNode(new BinaryOperationNode(
-                                        new ElementNode(),
-                                        BinaryOperation.MULTIPLY,
-                                        new NumberNode(6)
-                                ))
+                        expression(
+                                filter(op(element(), GREATER_THAN, number(1))),
+                                map(op(element(), ADD, number(2))),
+                                filter(op(element(), LESS_THAN, number(3))),
+                                map(op(element(), SUBTRACT, number(4))),
+                                filter(op(element(), EQUALS, number(5))),
+                                map(op(element(), MULTIPLY, number(6)))
                         )
                 )
         );

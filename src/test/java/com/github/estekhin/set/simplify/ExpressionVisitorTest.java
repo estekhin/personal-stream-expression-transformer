@@ -2,17 +2,24 @@ package com.github.estekhin.set.simplify;
 
 import java.util.stream.Stream;
 
-import com.github.estekhin.set.ast.BinaryOperation;
-import com.github.estekhin.set.ast.BinaryOperationNode;
-import com.github.estekhin.set.ast.BooleanNode;
-import com.github.estekhin.set.ast.ElementNode;
 import com.github.estekhin.set.ast.ExpressionNode;
-import com.github.estekhin.set.ast.NumberNode;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import static com.github.estekhin.set.ast.BinaryOperation.ADD;
+import static com.github.estekhin.set.ast.BinaryOperation.AND;
+import static com.github.estekhin.set.ast.BinaryOperation.EQUALS;
+import static com.github.estekhin.set.ast.BinaryOperation.GREATER_THAN;
+import static com.github.estekhin.set.ast.BinaryOperation.LESS_THAN;
+import static com.github.estekhin.set.ast.BinaryOperation.MULTIPLY;
+import static com.github.estekhin.set.ast.BinaryOperation.OR;
+import static com.github.estekhin.set.ast.BinaryOperation.SUBTRACT;
+import static com.github.estekhin.set.ast.Nodes.bool;
+import static com.github.estekhin.set.ast.Nodes.element;
+import static com.github.estekhin.set.ast.Nodes.number;
+import static com.github.estekhin.set.ast.Nodes.op;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ExpressionVisitorTest {
@@ -28,787 +35,255 @@ class ExpressionVisitorTest {
         return Stream.of(
                 // SimpleConstantFoldTransformer
                 Arguments.of(
-                        new BinaryOperationNode(
-                                new NumberNode(2),
-                                BinaryOperation.ADD,
-                                new NumberNode(3)
-                        ),
-                        new NumberNode(5)
+                        op(number(2), ADD, number(3)),
+                        number(5)
                 ),
                 Arguments.of(
-                        new BinaryOperationNode(
-                                new NumberNode(2),
-                                BinaryOperation.SUBTRACT,
-                                new NumberNode(3)
-                        ),
-                        new NumberNode(-1)
+                        op(number(2), SUBTRACT, number(3)),
+                        number(-1)
                 ),
                 Arguments.of(
-                        new BinaryOperationNode(
-                                new NumberNode(2),
-                                BinaryOperation.MULTIPLY,
-                                new NumberNode(3)
-                        ),
-                        new NumberNode(6)
+                        op(number(2), MULTIPLY, number(3)),
+                        number(6)
                 ),
                 Arguments.of(
-                        new BinaryOperationNode(
-                                new NumberNode(2),
-                                BinaryOperation.EQUALS,
-                                new NumberNode(3)
-                        ),
-                        new BooleanNode(false)
+                        op(number(2), EQUALS, number(3)),
+                        bool(false)
                 ),
                 Arguments.of(
-                        new BinaryOperationNode(
-                                new NumberNode(2),
-                                BinaryOperation.GREATER_THAN,
-                                new NumberNode(3)
-                        ),
-                        new BooleanNode(false)
+                        op(number(2), GREATER_THAN, number(3)),
+                        bool(false)
                 ),
                 Arguments.of(
-                        new BinaryOperationNode(
-                                new NumberNode(2),
-                                BinaryOperation.LESS_THAN,
-                                new NumberNode(3)
-                        ),
-                        new BooleanNode(true)
+                        op(number(2), LESS_THAN, number(3)),
+                        bool(true)
                 ),
 
                 // ZeroConstantTransformer
                 Arguments.of(
-                        new BinaryOperationNode(
-                                new ElementNode(),
-                                BinaryOperation.ADD,
-                                new NumberNode(0)
-                        ),
-                        new ElementNode()
+                        op(element(), ADD, number(0)),
+                        element()
                 ),
                 Arguments.of(
-                        new BinaryOperationNode(
-                                new ElementNode(),
-                                BinaryOperation.SUBTRACT,
-                                new NumberNode(0)
-                        ),
-                        new ElementNode()
+                        op(element(), SUBTRACT, number(0)),
+                        element()
                 ),
                 Arguments.of(
-                        new BinaryOperationNode(
-                                new ElementNode(),
-                                BinaryOperation.MULTIPLY,
-                                new NumberNode(0)
-                        ),
-                        new NumberNode(0)
+                        op(element(), MULTIPLY, number(0)),
+                        number(0)
                 ),
                 Arguments.of(
-                        new BinaryOperationNode(
-                                new NumberNode(0),
-                                BinaryOperation.ADD,
-                                new ElementNode()
-                        ),
-                        new ElementNode()
+                        op(number(0), ADD, element()),
+                        element()
                 ),
                 Arguments.of(
-                        new BinaryOperationNode(
-                                new NumberNode(0),
-                                BinaryOperation.MULTIPLY,
-                                new ElementNode()
-                        ),
-                        new NumberNode(0)
+                        op(number(0), MULTIPLY, element()),
+                        number(0)
                 ),
 
                 // OneConstantTransformer
                 Arguments.of(
-                        new BinaryOperationNode(
-                                new ElementNode(),
-                                BinaryOperation.MULTIPLY,
-                                new NumberNode(1)
-                        ),
-                        new ElementNode()
+                        op(element(), MULTIPLY, number(1)),
+                        element()
                 ),
                 Arguments.of(
-                        new BinaryOperationNode(
-                                new NumberNode(1),
-                                BinaryOperation.MULTIPLY,
-                                new ElementNode()
-                        ),
-                        new ElementNode()
+                        op(number(1), MULTIPLY, element()),
+                        element()
                 ),
 
                 // NegativeConstantTransformer
                 Arguments.of(
-                        new BinaryOperationNode(
-                                new ElementNode(),
-                                BinaryOperation.ADD,
-                                new NumberNode(-1)
-                        ),
-                        new BinaryOperationNode(
-                                new ElementNode(),
-                                BinaryOperation.SUBTRACT,
-                                new NumberNode(1)
-                        )
+                        op(element(), ADD, number(-1)),
+                        op(element(), SUBTRACT, number(1))
                 ),
                 Arguments.of(
-                        new BinaryOperationNode(
-                                new ElementNode(),
-                                BinaryOperation.SUBTRACT,
-                                new NumberNode(-1)
-                        ),
-                        new BinaryOperationNode(
-                                new ElementNode(),
-                                BinaryOperation.ADD,
-                                new NumberNode(1)
-                        )
+                        op(element(), SUBTRACT, number(-1)),
+                        op(element(), ADD, number(1))
                 ),
                 Arguments.of(
-                        new BinaryOperationNode(
-                                new NumberNode(-1),
-                                BinaryOperation.ADD,
-                                new ElementNode()
-                        ),
-                        new BinaryOperationNode(
-                                new ElementNode(),
-                                BinaryOperation.SUBTRACT,
-                                new NumberNode(1)
-                        )
+                        op(number(-1), ADD, element()),
+                        op(element(), SUBTRACT, number(1))
                 ),
 
                 // BooleanConstantTransformer
                 Arguments.of(
-                        new BinaryOperationNode(
-                                new BooleanNode(true),
-                                BinaryOperation.AND,
-                                new BinaryOperationNode(
-                                        new ElementNode(),
-                                        BinaryOperation.EQUALS,
-                                        new NumberNode(0)
-                                )
-                        ),
-                        new BinaryOperationNode(
-                                new ElementNode(),
-                                BinaryOperation.EQUALS,
-                                new NumberNode(0)
-                        )
+                        op(bool(true), AND, op(element(), EQUALS, number(0))),
+                        op(element(), EQUALS, number(0))
                 ),
                 Arguments.of(
-                        new BinaryOperationNode(
-                                new BooleanNode(false),
-                                BinaryOperation.AND,
-                                new BinaryOperationNode(
-                                        new ElementNode(),
-                                        BinaryOperation.EQUALS,
-                                        new NumberNode(0)
-                                )
-                        ),
-                        new BooleanNode(false)
+                        op(bool(false), AND, op(element(), EQUALS, number(0))),
+                        bool(false)
                 ),
                 Arguments.of(
-                        new BinaryOperationNode(
-                                new BinaryOperationNode(
-                                        new ElementNode(),
-                                        BinaryOperation.EQUALS,
-                                        new NumberNode(0)
-                                ),
-                                BinaryOperation.AND,
-                                new BooleanNode(true)
-                        ),
-                        new BinaryOperationNode(
-                                new ElementNode(),
-                                BinaryOperation.EQUALS,
-                                new NumberNode(0)
-                        )
+                        op(op(element(), EQUALS, number(0)), AND, bool(true)),
+                        op(element(), EQUALS, number(0))
                 ),
                 Arguments.of(
-                        new BinaryOperationNode(
-                                new BinaryOperationNode(
-                                        new ElementNode(),
-                                        BinaryOperation.EQUALS,
-                                        new NumberNode(0)
-                                ),
-                                BinaryOperation.AND,
-                                new BooleanNode(false)
-                        ),
-                        new BooleanNode(false)
+                        op(op(element(), EQUALS, number(0)), AND, bool(false)),
+                        bool(false)
                 ),
 
 
                 Arguments.of(
-                        new BinaryOperationNode(
-                                new BooleanNode(true),
-                                BinaryOperation.OR,
-                                new BinaryOperationNode(
-                                        new ElementNode(),
-                                        BinaryOperation.EQUALS,
-                                        new NumberNode(0)
-                                )
-                        ),
-                        new BooleanNode(true)
+                        op(bool(true), OR, op(element(), EQUALS, number(0))),
+                        bool(true)
                 ),
                 Arguments.of(
-                        new BinaryOperationNode(
-                                new BooleanNode(false),
-                                BinaryOperation.OR,
-                                new BinaryOperationNode(
-                                        new ElementNode(),
-                                        BinaryOperation.EQUALS,
-                                        new NumberNode(0)
-                                )
-                        ),
-                        new BinaryOperationNode(
-                                new ElementNode(),
-                                BinaryOperation.EQUALS,
-                                new NumberNode(0)
-                        )
+                        op(bool(false), OR, op(element(), EQUALS, number(0))),
+                        op(element(), EQUALS, number(0))
                 ),
                 Arguments.of(
-                        new BinaryOperationNode(
-                                new BinaryOperationNode(
-                                        new ElementNode(),
-                                        BinaryOperation.EQUALS,
-                                        new NumberNode(0)
-                                ),
-                                BinaryOperation.OR,
-                                new BooleanNode(true)
-                        ),
-                        new BooleanNode(true)
+                        op(op(element(), EQUALS, number(0)), OR, bool(true)),
+                        bool(true)
                 ),
                 Arguments.of(
-                        new BinaryOperationNode(
-                                new BinaryOperationNode(
-                                        new ElementNode(),
-                                        BinaryOperation.EQUALS,
-                                        new NumberNode(0)
-                                ),
-                                BinaryOperation.OR,
-                                new BooleanNode(false)
-                        ),
-                        new BinaryOperationNode(
-                                new ElementNode(),
-                                BinaryOperation.EQUALS,
-                                new NumberNode(0)
-                        )
+                        op(op(element(), EQUALS, number(0)), OR, bool(false)),
+                        op(element(), EQUALS, number(0))
                 ),
 
                 // NestedConstantFoldTransformer
                 Arguments.of(
-                        new BinaryOperationNode(
-                                new BinaryOperationNode(
-                                        new ElementNode(),
-                                        BinaryOperation.ADD,
-                                        new NumberNode(1)
-                                ),
-                                BinaryOperation.ADD,
-                                new NumberNode(2)
-                        ),
-                        new BinaryOperationNode(
-                                new ElementNode(),
-                                BinaryOperation.ADD,
-                                new NumberNode(3)
-                        )
+                        op(op(element(), ADD, number(1)), ADD, number(2)),
+                        op(element(), ADD, number(3))
                 ),
                 Arguments.of(
-                        new BinaryOperationNode(
-                                new BinaryOperationNode(
-                                        new ElementNode(),
-                                        BinaryOperation.ADD,
-                                        new NumberNode(1)
-                                ),
-                                BinaryOperation.SUBTRACT,
-                                new NumberNode(2)
-                        ),
-                        new BinaryOperationNode(
-                                new ElementNode(),
-                                BinaryOperation.ADD,
-                                new NumberNode(-1)
-                        )
+                        op(op(element(), ADD, number(1)), SUBTRACT, number(2)),
+                        op(element(), ADD, number(-1))
                 ),
                 Arguments.of(
-                        new BinaryOperationNode(
-                                new BinaryOperationNode(
-                                        new ElementNode(),
-                                        BinaryOperation.SUBTRACT,
-                                        new NumberNode(1)
-                                ),
-                                BinaryOperation.ADD,
-                                new NumberNode(2)
-                        ),
-                        new BinaryOperationNode(
-                                new ElementNode(),
-                                BinaryOperation.SUBTRACT,
-                                new NumberNode(-1)
-                        )
+                        op(op(element(), SUBTRACT, number(1)), ADD, number(2)),
+                        op(element(), SUBTRACT, number(-1))
                 ),
                 Arguments.of(
-                        new BinaryOperationNode(
-                                new BinaryOperationNode(
-                                        new ElementNode(),
-                                        BinaryOperation.SUBTRACT,
-                                        new NumberNode(1)
-                                ),
-                                BinaryOperation.SUBTRACT,
-                                new NumberNode(2)
-                        ),
-                        new BinaryOperationNode(
-                                new ElementNode(),
-                                BinaryOperation.SUBTRACT,
-                                new NumberNode(3)
-                        )
+                        op(op(element(), SUBTRACT, number(1)), SUBTRACT, number(2)),
+                        op(element(), SUBTRACT, number(3))
                 ),
                 Arguments.of(
-                        new BinaryOperationNode(
-                                new BinaryOperationNode(
-                                        new ElementNode(),
-                                        BinaryOperation.ADD,
-                                        new NumberNode(1)
-                                ),
-                                BinaryOperation.EQUALS,
-                                new NumberNode(2)
-                        ),
-                        new BinaryOperationNode(
-                                new ElementNode(),
-                                BinaryOperation.EQUALS,
-                                new NumberNode(1)
-                        )
+                        op(op(element(), ADD, number(1)), EQUALS, number(2)),
+                        op(element(), EQUALS, number(1))
                 ),
                 Arguments.of(
-                        new BinaryOperationNode(
-                                new BinaryOperationNode(
-                                        new ElementNode(),
-                                        BinaryOperation.SUBTRACT,
-                                        new NumberNode(1)
-                                ),
-                                BinaryOperation.GREATER_THAN,
-                                new NumberNode(2)
-                        ),
-                        new BinaryOperationNode(
-                                new ElementNode(),
-                                BinaryOperation.GREATER_THAN,
-                                new NumberNode(3)
-                        )
+                        op(op(element(), SUBTRACT, number(1)), GREATER_THAN, number(2)),
+                        op(element(), GREATER_THAN, number(3))
                 ),
                 Arguments.of(
-                        new BinaryOperationNode(
-                                new BinaryOperationNode(
-                                        new ElementNode(),
-                                        BinaryOperation.SUBTRACT,
-                                        new NumberNode(1)
-                                ),
-                                BinaryOperation.LESS_THAN,
-                                new NumberNode(2)
-                        ),
-                        new BinaryOperationNode(
-                                new ElementNode(),
-                                BinaryOperation.LESS_THAN,
-                                new NumberNode(3)
-                        )
+                        op(op(element(), SUBTRACT, number(1)), LESS_THAN, number(2)),
+                        op(element(), LESS_THAN, number(3))
                 ),
                 Arguments.of(
-                        new BinaryOperationNode(
-                                new NumberNode(2),
-                                BinaryOperation.ADD,
-                                new BinaryOperationNode(
-                                        new NumberNode(1),
-                                        BinaryOperation.ADD,
-                                        new ElementNode()
-                                )
-                        ),
-                        new BinaryOperationNode(
-                                new NumberNode(3),
-                                BinaryOperation.ADD,
-                                new ElementNode()
-                        )
+                        op(number(2), ADD, op(number(1), ADD, element())),
+                        op(number(3), ADD, element())
                 ),
                 Arguments.of(
-                        new BinaryOperationNode(
-                                new NumberNode(2),
-                                BinaryOperation.SUBTRACT,
-                                new BinaryOperationNode(
-                                        new NumberNode(1),
-                                        BinaryOperation.ADD,
-                                        new ElementNode()
-                                )
-                        ),
-                        new BinaryOperationNode(
-                                new NumberNode(1),
-                                BinaryOperation.SUBTRACT,
-                                new ElementNode()
-                        )
+                        op(number(2), SUBTRACT, op(number(1), ADD, element())),
+                        op(number(1), SUBTRACT, element())
                 ),
                 Arguments.of(
-                        new BinaryOperationNode(
-                                new NumberNode(2),
-                                BinaryOperation.ADD,
-                                new BinaryOperationNode(
-                                        new NumberNode(1),
-                                        BinaryOperation.SUBTRACT,
-                                        new ElementNode()
-                                )
-                        ),
-                        new BinaryOperationNode(
-                                new NumberNode(3),
-                                BinaryOperation.SUBTRACT,
-                                new ElementNode()
-                        )
+                        op(number(2), ADD, op(number(1), SUBTRACT, element())),
+                        op(number(3), SUBTRACT, element())
                 ),
                 Arguments.of(
-                        new BinaryOperationNode(
-                                new NumberNode(2),
-                                BinaryOperation.SUBTRACT,
-                                new BinaryOperationNode(
-                                        new NumberNode(1),
-                                        BinaryOperation.SUBTRACT,
-                                        new ElementNode()
-                                )
-                        ),
-                        new BinaryOperationNode(
-                                new NumberNode(1),
-                                BinaryOperation.SUBTRACT,
-                                new ElementNode()
-                        )
+                        op(number(2), SUBTRACT, op(number(1), SUBTRACT, element())),
+                        op(number(1), SUBTRACT, element())
                 ),
                 Arguments.of(
-                        new BinaryOperationNode(
-                                new NumberNode(2),
-                                BinaryOperation.EQUALS,
-                                new BinaryOperationNode(
-                                        new NumberNode(1),
-                                        BinaryOperation.ADD,
-                                        new ElementNode()
-                                )
-                        ),
-                        new BinaryOperationNode(
-                                new NumberNode(1),
-                                BinaryOperation.EQUALS,
-                                new ElementNode()
-                        )
+                        op(number(2), EQUALS, op(number(1), ADD, element())),
+                        op(number(1), EQUALS, element())
                 ),
                 Arguments.of(
-                        new BinaryOperationNode(
-                                new NumberNode(2),
-                                BinaryOperation.GREATER_THAN,
-                                new BinaryOperationNode(
-                                        new NumberNode(1),
-                                        BinaryOperation.SUBTRACT,
-                                        new ElementNode()
-                                )
-                        ),
-                        new BinaryOperationNode(
-                                new NumberNode(3),
-                                BinaryOperation.GREATER_THAN,
-                                new ElementNode()
-                        )
+                        op(number(2), GREATER_THAN, op(number(1), SUBTRACT, element())),
+                        op(number(3), GREATER_THAN, element())
                 ),
                 Arguments.of(
-                        new BinaryOperationNode(
-                                new NumberNode(2),
-                                BinaryOperation.LESS_THAN,
-                                new BinaryOperationNode(
-                                        new NumberNode(1),
-                                        BinaryOperation.SUBTRACT,
-                                        new ElementNode()
-                                )
-                        ),
-                        new BinaryOperationNode(
-                                new NumberNode(3),
-                                BinaryOperation.LESS_THAN,
-                                new ElementNode()
-                        )
+                        op(number(2), LESS_THAN, op(number(1), SUBTRACT, element())),
+                        op(number(3), LESS_THAN, element())
                 ),
                 Arguments.of(
-                        new BinaryOperationNode(
-                                new NumberNode(2),
-                                BinaryOperation.ADD,
-                                new BinaryOperationNode(
-                                        new ElementNode(),
-                                        BinaryOperation.ADD,
-                                        new NumberNode(1)
-                                )
-                        ),
-                        new BinaryOperationNode(
-                                new NumberNode(3),
-                                BinaryOperation.ADD,
-                                new ElementNode()
-                        )
+                        op(number(2), ADD, op(element(), ADD, number(1))),
+                        op(number(3), ADD, element())
                 ),
                 Arguments.of(
-                        new BinaryOperationNode(
-                                new NumberNode(2),
-                                BinaryOperation.SUBTRACT,
-                                new BinaryOperationNode(
-                                        new ElementNode(),
-                                        BinaryOperation.ADD,
-                                        new NumberNode(1)
-                                )
-                        ),
-                        new BinaryOperationNode(
-                                new NumberNode(1),
-                                BinaryOperation.SUBTRACT,
-                                new ElementNode()
-                        )
+                        op(number(2), SUBTRACT, op(element(), ADD, number(1))),
+                        op(number(1), SUBTRACT, element())
                 ),
                 Arguments.of(
-                        new BinaryOperationNode(
-                                new NumberNode(2),
-                                BinaryOperation.ADD,
-                                new BinaryOperationNode(
-                                        new ElementNode(),
-                                        BinaryOperation.SUBTRACT,
-                                        new NumberNode(1)
-                                )
-                        ),
-                        new BinaryOperationNode(
-                                new NumberNode(1),
-                                BinaryOperation.ADD,
-                                new ElementNode()
-                        )
+                        op(number(2), ADD, op(element(), SUBTRACT, number(1))),
+                        op(number(1), ADD, element())
                 ),
                 Arguments.of(
-                        new BinaryOperationNode(
-                                new NumberNode(2),
-                                BinaryOperation.SUBTRACT,
-                                new BinaryOperationNode(
-                                        new ElementNode(),
-                                        BinaryOperation.SUBTRACT,
-                                        new NumberNode(1)
-                                )
-                        ),
-                        new BinaryOperationNode(
-                                new NumberNode(3),
-                                BinaryOperation.SUBTRACT,
-                                new ElementNode()
-                        )
+                        op(number(2), SUBTRACT, op(element(), SUBTRACT, number(1))),
+                        op(number(3), SUBTRACT, element())
                 ),
                 Arguments.of(
-                        new BinaryOperationNode(
-                                new NumberNode(2),
-                                BinaryOperation.EQUALS,
-                                new BinaryOperationNode(
-                                        new ElementNode(),
-                                        BinaryOperation.ADD,
-                                        new NumberNode(1)
-                                )
-                        ),
-                        new BinaryOperationNode(
-                                new NumberNode(1),
-                                BinaryOperation.EQUALS,
-                                new ElementNode()
-                        )
+                        op(number(2), EQUALS, op(element(), ADD, number(1))),
+                        op(number(1), EQUALS, element())
                 ),
                 Arguments.of(
-                        new BinaryOperationNode(
-                                new NumberNode(2),
-                                BinaryOperation.GREATER_THAN,
-                                new BinaryOperationNode(
-                                        new ElementNode(),
-                                        BinaryOperation.SUBTRACT,
-                                        new NumberNode(1)
-                                )
-                        ),
-                        new BinaryOperationNode(
-                                new NumberNode(3),
-                                BinaryOperation.GREATER_THAN,
-                                new ElementNode()
-                        )
+                        op(number(2), GREATER_THAN, op(element(), SUBTRACT, number(1))),
+                        op(number(3), GREATER_THAN, element())
                 ),
                 Arguments.of(
-                        new BinaryOperationNode(
-                                new NumberNode(2),
-                                BinaryOperation.LESS_THAN,
-                                new BinaryOperationNode(
-                                        new ElementNode(),
-                                        BinaryOperation.SUBTRACT,
-                                        new NumberNode(1)
-                                )
-                        ),
-                        new BinaryOperationNode(
-                                new NumberNode(3),
-                                BinaryOperation.LESS_THAN,
-                                new ElementNode()
-                        )
+                        op(number(2), LESS_THAN, op(element(), SUBTRACT, number(1))),
+                        op(number(3), LESS_THAN, element())
                 ),
                 Arguments.of(
-                        new BinaryOperationNode(
-                                new BinaryOperationNode(
-                                        new NumberNode(1),
-                                        BinaryOperation.ADD,
-                                        new ElementNode()
-                                ),
-                                BinaryOperation.ADD,
-                                new NumberNode(2)
-                        ),
-                        new BinaryOperationNode(
-                                new ElementNode(),
-                                BinaryOperation.ADD,
-                                new NumberNode(3)
-                        )
+                        op(op(number(1), ADD, element()), ADD, number(2)),
+                        op(element(), ADD, number(3))
                 ),
                 Arguments.of(
-                        new BinaryOperationNode(
-                                new BinaryOperationNode(
-                                        new NumberNode(1),
-                                        BinaryOperation.ADD,
-                                        new ElementNode()
-                                ),
-                                BinaryOperation.SUBTRACT,
-                                new NumberNode(2)
-                        ),
-                        new BinaryOperationNode(
-                                new ElementNode(),
-                                BinaryOperation.ADD,
-                                new NumberNode(-1)
-                        )
+                        op(op(number(1), ADD, element()), SUBTRACT, number(2)),
+                        op(element(), ADD, number(-1))
                 ),
                 Arguments.of(
-                        new BinaryOperationNode(
-                                new BinaryOperationNode(
-                                        new NumberNode(1),
-                                        BinaryOperation.SUBTRACT,
-                                        new ElementNode()
-                                ),
-                                BinaryOperation.ADD,
-                                new NumberNode(2)
-                        ),
-                        new BinaryOperationNode(
-                                new NumberNode(3),
-                                BinaryOperation.SUBTRACT,
-                                new ElementNode()
-                        )
+                        op(op(number(1), SUBTRACT, element()), ADD, number(2)),
+                        op(number(3), SUBTRACT, element())
                 ),
                 Arguments.of(
-                        new BinaryOperationNode(
-                                new BinaryOperationNode(
-                                        new NumberNode(1),
-                                        BinaryOperation.SUBTRACT,
-                                        new ElementNode()
-                                ),
-                                BinaryOperation.SUBTRACT,
-                                new NumberNode(2)
-                        ),
-                        new BinaryOperationNode(
-                                new NumberNode(-1),
-                                BinaryOperation.SUBTRACT,
-                                new ElementNode()
-                        )
+                        op(op(number(1), SUBTRACT, element()), SUBTRACT, number(2)),
+                        op(number(-1), SUBTRACT, element())
                 ),
                 Arguments.of(
-                        new BinaryOperationNode(
-                                new BinaryOperationNode(
-                                        new NumberNode(1),
-                                        BinaryOperation.ADD,
-                                        new ElementNode()
-                                ),
-                                BinaryOperation.EQUALS,
-                                new NumberNode(2)
-                        ),
-                        new BinaryOperationNode(
-                                new ElementNode(),
-                                BinaryOperation.EQUALS,
-                                new NumberNode(1)
-                        )
+                        op(op(number(1), ADD, element()), EQUALS, number(2)),
+                        op(element(), EQUALS, number(1))
                 ),
                 Arguments.of(
-                        new BinaryOperationNode(
-                                new BinaryOperationNode(
-                                        new NumberNode(1),
-                                        BinaryOperation.SUBTRACT,
-                                        new ElementNode()
-                                ),
-                                BinaryOperation.GREATER_THAN,
-                                new NumberNode(2)
-                        ),
-                        new BinaryOperationNode(
-                                new NumberNode(-1),
-                                BinaryOperation.GREATER_THAN,
-                                new ElementNode()
-                        )
+                        op(op(number(1), SUBTRACT, element()), GREATER_THAN, number(2)),
+                        op(number(-1), GREATER_THAN, element())
                 ),
                 Arguments.of(
-                        new BinaryOperationNode(
-                                new BinaryOperationNode(
-                                        new NumberNode(1),
-                                        BinaryOperation.SUBTRACT,
-                                        new ElementNode()
-                                ),
-                                BinaryOperation.LESS_THAN,
-                                new NumberNode(2)
-                        ),
-                        new BinaryOperationNode(
-                                new NumberNode(-1),
-                                BinaryOperation.LESS_THAN,
-                                new ElementNode()
-                        )
+                        op(op(number(1), SUBTRACT, element()), LESS_THAN, number(2)),
+                        op(number(-1), LESS_THAN, element())
                 ),
                 // ElementFirstTransformer
                 Arguments.of(
-                        new BinaryOperationNode(
-                                new NumberNode(1),
-                                BinaryOperation.ADD,
-                                new ElementNode()
-                        ),
-                        new BinaryOperationNode(
-                                new ElementNode(),
-                                BinaryOperation.ADD,
-                                new NumberNode(1)
-                        )
+                        op(number(1), ADD, element()),
+                        op(element(), ADD, number(1))
                 ),
                 Arguments.of(
-                        new BinaryOperationNode(
-                                new NumberNode(2),
-                                BinaryOperation.MULTIPLY,
-                                new ElementNode()
-                        ),
-                        new BinaryOperationNode(
-                                new ElementNode(),
-                                BinaryOperation.MULTIPLY,
-                                new NumberNode(2)
-                        )
+                        op(number(2), MULTIPLY, element()),
+                        op(element(), MULTIPLY, number(2))
                 ),
                 Arguments.of(
-                        new BinaryOperationNode(
-                                new NumberNode(2),
-                                BinaryOperation.EQUALS,
-                                new ElementNode()
-                        ),
-                        new BinaryOperationNode(
-                                new ElementNode(),
-                                BinaryOperation.EQUALS,
-                                new NumberNode(2)
-                        )
+                        op(number(2), EQUALS, element()),
+                        op(element(), EQUALS, number(2))
                 ),
                 Arguments.of(
-                        new BinaryOperationNode(
-                                new NumberNode(2),
-                                BinaryOperation.GREATER_THAN,
-                                new ElementNode()
-                        ),
-                        new BinaryOperationNode(
-                                new ElementNode(),
-                                BinaryOperation.LESS_THAN,
-                                new NumberNode(2)
-                        )
+                        op(number(2), GREATER_THAN, element()),
+                        op(element(), LESS_THAN, number(2))
                 ),
                 Arguments.of(
-                        new BinaryOperationNode(
-                                new NumberNode(2),
-                                BinaryOperation.LESS_THAN,
-                                new ElementNode()
-                        ),
-                        new BinaryOperationNode(
-                                new ElementNode(),
-                                BinaryOperation.GREATER_THAN,
-                                new NumberNode(2)
-                        )
+                        op(number(2), LESS_THAN, element()),
+                        op(element(), GREATER_THAN, number(2))
                 ),
 
                 // no-op
                 Arguments.of(
-                        new NumberNode(1),
-                        new NumberNode(1)
+                        number(1),
+                        number(1)
                 ),
                 Arguments.of(
-                        new ElementNode(),
-                        new ElementNode()
+                        element(),
+                        element()
                 )
         );
     }
