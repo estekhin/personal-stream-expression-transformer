@@ -276,6 +276,36 @@ class ExpressionTransformerTest {
                         op(element(), GREATER_THAN, number(2))
                 ),
 
+                // SameOperandTransformer
+                Arguments.of(
+                        op(element(), ADD, element()),
+                        op(element(), MULTIPLY, number(2))
+                ),
+                Arguments.of(
+                        op(element(), SUBTRACT, element()),
+                        number(0)
+                ),
+                Arguments.of(
+                        op(element(), EQUALS, element()),
+                        bool(true)
+                ),
+                Arguments.of(
+                        op(element(), GREATER_THAN, element()),
+                        bool(false)
+                ),
+                Arguments.of(
+                        op(element(), LESS_THAN, element()),
+                        bool(false)
+                ),
+                Arguments.of(
+                        op(op(element(), GREATER_THAN, number(0)), AND, op(element(), GREATER_THAN, number(0))),
+                        op(element(), GREATER_THAN, number(0))
+                ),
+                Arguments.of(
+                        op(op(element(), GREATER_THAN, number(0)), OR, op(element(), GREATER_THAN, number(0))),
+                        op(element(), GREATER_THAN, number(0))
+                ),
+
                 // no-op
                 Arguments.of(
                         number(1),

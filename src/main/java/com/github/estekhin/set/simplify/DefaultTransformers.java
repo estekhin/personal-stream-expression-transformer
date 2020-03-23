@@ -4,13 +4,14 @@ import java.util.List;
 
 final class DefaultTransformers {
 
-    public static final List<BinaryOperationTransformer> transformers = List.of(
+    static final List<BinaryOperationTransformer> transformers = List.of(
             new SimpleConstantFoldTransformer(),
             new ZeroConstantTransformer(),
             new OneConstantTransformer(),
             new NegativeConstantTransformer(),
             new BooleanConstantTransformer(),
             new NestedConstantFoldTransformer(),
+            new SameOperandTransformer(),
             new ElementFirstTransformer()
     );
 
