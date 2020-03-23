@@ -184,7 +184,7 @@ class ExpressionTransformerTest {
                 ),
                 Arguments.of(
                         op(number(2), SUBTRACT, op(number(1), SUBTRACT, element())),
-                        op(number(1), SUBTRACT, element())
+                        op(number(1), ADD, element())
                 ),
                 Arguments.of(
                         op(number(2), EQUALS, op(number(1), ADD, element())),
@@ -192,11 +192,11 @@ class ExpressionTransformerTest {
                 ),
                 Arguments.of(
                         op(number(2), GREATER_THAN, op(number(1), SUBTRACT, element())),
-                        op(number(3), GREATER_THAN, element())
+                        op(element(), GREATER_THAN, number(-1))
                 ),
                 Arguments.of(
                         op(number(2), LESS_THAN, op(number(1), SUBTRACT, element())),
-                        op(number(3), LESS_THAN, element())
+                        op(element(), LESS_THAN, number(-1))
                 ),
                 Arguments.of(
                         op(number(2), ADD, op(element(), ADD, number(1))),
