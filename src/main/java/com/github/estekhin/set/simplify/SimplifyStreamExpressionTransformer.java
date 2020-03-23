@@ -12,10 +12,18 @@ import org.jetbrains.annotations.NotNull;
 
 public final class SimplifyStreamExpressionTransformer implements NodeVisitor<StreamExpressionNode> {
 
+    private final CallVisitor visitor;
+
+
+    public SimplifyStreamExpressionTransformer() {
+        visitor = new CallVisitor(new ExpressionTransformer(DefaultTransformers.transformers));
+    }
+
+
     @Override
     public @NotNull StreamExpressionNode visitStreamExpressionNode(@NotNull StreamExpressionNode node) {
         List<CallNode> transformedCalls = node.getCalls().stream()
-                .map(it -> Objects.requireNonNull(it.visit(new CallVisitor())))
+                .map(it -> Objects.requireNonNull(it.visit(visitor)))
                 .collect(Collectors.toUnmodifiableList());
         return Nodes.expression(transformedCalls);
     }

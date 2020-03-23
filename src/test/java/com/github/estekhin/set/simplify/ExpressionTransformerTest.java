@@ -22,12 +22,12 @@ import static com.github.estekhin.set.ast.Nodes.number;
 import static com.github.estekhin.set.ast.Nodes.op;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class ExpressionVisitorTest {
+class ExpressionTransformerTest {
 
     @ParameterizedTest
     @MethodSource("expressions")
     void simplifyExpressions(@NotNull ExpressionNode source, @NotNull ExpressionNode expected) {
-        assertEquals(expected, source.visit(new ExpressionVisitor()));
+        assertEquals(expected, source.visit(new ExpressionTransformer(DefaultTransformers.transformers)));
     }
 
 

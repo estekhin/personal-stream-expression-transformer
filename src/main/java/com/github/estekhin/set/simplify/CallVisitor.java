@@ -12,6 +12,14 @@ import org.jetbrains.annotations.NotNull;
 
 final class CallVisitor implements NodeVisitor<CallNode> {
 
+    private final @NotNull ExpressionTransformer transformer;
+
+
+    CallVisitor(@NotNull ExpressionTransformer transformer) {
+        this.transformer = transformer;
+    }
+
+
     @Override
     public @NotNull CallNode visitFilterCallNode(@NotNull FilterCallNode node) {
         ExpressionNode transformedOperand = transform(node.getOperand());
@@ -28,12 +36,12 @@ final class CallVisitor implements NodeVisitor<CallNode> {
                 : Nodes.map(transformedOperand);
     }
 
-    private static @NotNull ExpressionNode transform(@NotNull ExpressionNode node) {
+    private @NotNull ExpressionNode transform(@NotNull ExpressionNode node) {
         ExpressionNode previous = node;
-        ExpressionNode next = Objects.requireNonNull(previous.visit(new ExpressionVisitor()));
+        ExpressionNode next = Objects.requireNonNull(previous.visit(transformer));
         while (!next.equals(previous)) {
             previous = next;
-            next = Objects.requireNonNull(previous.visit(new ExpressionVisitor()));
+            next = Objects.requireNonNull(previous.visit(transformer));
         }
         return next;
     }
