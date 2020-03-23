@@ -1,8 +1,8 @@
 package com.github.estekhin.set.simplify;
 
 import com.github.estekhin.set.ast.BinaryOperation;
-import com.github.estekhin.set.ast.BinaryOperationNode;
 import com.github.estekhin.set.ast.ExpressionNode;
+import com.github.estekhin.set.ast.Nodes;
 import com.github.estekhin.set.ast.NumberNode;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -15,10 +15,10 @@ final class NegativeConstantTransformer extends BinaryOperationWithNumberTransfo
             return null;
         }
         if (operation == BinaryOperation.ADD) {
-            return new BinaryOperationNode(
+            return Nodes.op(
                     otherOperand,
                     BinaryOperation.SUBTRACT,
-                    new NumberNode(Math.subtractExact(0L, number.getValue()))
+                    Nodes.number(Math.subtractExact(0L, number.getValue()))
             );
         }
         return null;
@@ -30,17 +30,17 @@ final class NegativeConstantTransformer extends BinaryOperationWithNumberTransfo
             return null;
         }
         if (operation == BinaryOperation.ADD) {
-            return new BinaryOperationNode(
+            return Nodes.op(
                     otherOperand,
                     BinaryOperation.SUBTRACT,
-                    new NumberNode(Math.subtractExact(0L, number.getValue()))
+                    Nodes.number(Math.subtractExact(0L, number.getValue()))
             );
         }
         if (operation == BinaryOperation.SUBTRACT) {
-            return new BinaryOperationNode(
+            return Nodes.op(
                     otherOperand,
                     BinaryOperation.ADD,
-                    new NumberNode(Math.subtractExact(0L, number.getValue()))
+                    Nodes.number(Math.subtractExact(0L, number.getValue()))
             );
         }
         return null;

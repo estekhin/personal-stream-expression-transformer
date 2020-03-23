@@ -5,12 +5,12 @@ import org.jetbrains.annotations.Nullable;
 
 public final class NumberNode extends ExpressionNode {
 
-    public static final @NotNull String UNARY_MINUS = "-";
+    static final @NotNull String UNARY_MINUS = "-";
 
     private final long value;
 
 
-    public NumberNode(long value) {
+    NumberNode(long value) {
         this.value = value;
     }
 

@@ -6,15 +6,15 @@ import org.jetbrains.annotations.Nullable;
 
 public final class BinaryOperationNode extends ExpressionNode {
 
-    public static final @NotNull String BINARY_EXPRESSION_START = "(";
-    public static final @NotNull String BINARY_EXPRESSION_END = ")";
+    static final @NotNull String BINARY_EXPRESSION_START = "(";
+    static final @NotNull String BINARY_EXPRESSION_END = ")";
 
     private final @NotNull ExpressionNode operand1;
     private final @NotNull BinaryOperation operation;
     private final @NotNull ExpressionNode operand2;
 
 
-    public BinaryOperationNode(@NotNull ExpressionNode operand1, @NotNull BinaryOperation operation, @NotNull ExpressionNode operand2) {
+    BinaryOperationNode(@NotNull ExpressionNode operand1, @NotNull BinaryOperation operation, @NotNull ExpressionNode operand2) {
         if (operand1.type() != operation.getOperandsType()) {
             throw new ExpressionTypeException(String.format(
                     "%s operation operand '%s' has invalid type %s",

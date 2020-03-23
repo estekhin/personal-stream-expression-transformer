@@ -26,18 +26,18 @@ public final class StreamExpressionParser {
         if (index != source.length()) {
             throw newExpectedTokensException(source, index, StreamExpressionNode.CALL_CHAIN_SEPARATOR);
         }
-        return new StreamExpressionNode(calls);
+        return Nodes.expression(calls);
     }
 
     private @NotNull CallNode parseCall() {
         if (tryConsume(FilterCallNode.FILTER_START)) {
             ExpressionNode operand = parseExpression();
             consume(FilterCallNode.FILTER_END);
-            return new FilterCallNode(operand);
+            return Nodes.filter(operand);
         } else if (tryConsume(MapCallNode.MAP_START)) {
             ExpressionNode operand = parseExpression();
             consume(MapCallNode.MAP_END);
-            return new MapCallNode(operand);
+            return Nodes.map(operand);
         } else {
             throw newExpectedTokensException(source, index, MapCallNode.MAP_START, FilterCallNode.FILTER_START);
         }
@@ -45,21 +45,21 @@ public final class StreamExpressionParser {
 
     private @NotNull ExpressionNode parseExpression() {
         if (tryConsume(ElementNode.ELEMENT)) {
-            return new ElementNode();
+            return Nodes.element();
         } else if (tryConsume(BooleanNode.TRUE)) {
-            return new BooleanNode(true);
+            return Nodes.bool(true);
         } else if (tryConsume(BooleanNode.FALSE)) {
-            return new BooleanNode(false);
+            return Nodes.bool(false);
         } else if (tryConsume(BinaryOperationNode.BINARY_EXPRESSION_START)) {
             ExpressionNode operand1 = parseExpression();
             BinaryOperation operation = parseOperation();
             ExpressionNode operand2 = parseExpression();
             consume(BinaryOperationNode.BINARY_EXPRESSION_END);
-            return new BinaryOperationNode(operand1, operation, operand2);
+            return Nodes.op(operand1, operation, operand2);
         } else if (tryConsume(NumberNode.UNARY_MINUS)) {
-            return new NumberNode(Math.subtractExact(0L, parseNumber()));
+            return Nodes.number(Math.subtractExact(0L, parseNumber()));
         } else if (peekDigit()) {
-            return new NumberNode(parseNumber());
+            return Nodes.number(parseNumber());
         } else {
             throw newExpectedTokensException(source, index, ElementNode.ELEMENT, BinaryOperationNode.BINARY_EXPRESSION_START, NumberNode.UNARY_MINUS, "<digit>");
         }

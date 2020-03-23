@@ -1,10 +1,16 @@
 package com.github.estekhin.set.ast;
 
+import java.util.List;
+
 import org.jetbrains.annotations.NotNull;
 
 public final class Nodes {
 
     public static @NotNull StreamExpressionNode expression(@NotNull CallNode... calls) {
+        return new StreamExpressionNode(calls);
+    }
+
+    public static @NotNull StreamExpressionNode expression(@NotNull List<CallNode> calls) {
         return new StreamExpressionNode(calls);
     }
 

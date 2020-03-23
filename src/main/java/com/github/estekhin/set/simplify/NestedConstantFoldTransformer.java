@@ -1,8 +1,8 @@
 package com.github.estekhin.set.simplify;
 
 import com.github.estekhin.set.ast.BinaryOperation;
-import com.github.estekhin.set.ast.BinaryOperationNode;
 import com.github.estekhin.set.ast.ExpressionNode;
+import com.github.estekhin.set.ast.Nodes;
 import com.github.estekhin.set.ast.NumberNode;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -18,20 +18,20 @@ final class NestedConstantFoldTransformer extends NestedBinaryOperationWithNumbe
             return null;
         }
         if (operation2 == BinaryOperation.ADD) {
-            return new BinaryOperationNode(
-                    new NumberNode(Math.addExact(number2.getValue(), number1.getValue())),
+            return Nodes.op(
+                    Nodes.number(Math.addExact(number2.getValue(), number1.getValue())),
                     operation1,
                     otherOperand
             );
         } else if (operation2 == BinaryOperation.SUBTRACT) {
-            return new BinaryOperationNode(
-                    new NumberNode(Math.subtractExact(number2.getValue(), number1.getValue())),
+            return Nodes.op(
+                    Nodes.number(Math.subtractExact(number2.getValue(), number1.getValue())),
                     BinaryOperation.SUBTRACT,
                     otherOperand
             );
         } else if (operation2 == BinaryOperation.EQUALS || operation2 == BinaryOperation.GREATER_THAN || operation2 == BinaryOperation.LESS_THAN) {
-            return new BinaryOperationNode(
-                    new NumberNode(operation1 == BinaryOperation.ADD
+            return Nodes.op(
+                    Nodes.number(operation1 == BinaryOperation.ADD
                             ? Math.subtractExact(number2.getValue(), number1.getValue())
                             : Math.addExact(number2.getValue(), number1.getValue())
                     ),
@@ -51,8 +51,8 @@ final class NestedConstantFoldTransformer extends NestedBinaryOperationWithNumbe
             return null;
         }
         if (operation2 == BinaryOperation.ADD || operation2 == BinaryOperation.SUBTRACT) {
-            return new BinaryOperationNode(
-                    new NumberNode(operation1 == operation2
+            return Nodes.op(
+                    Nodes.number(operation1 == operation2
                             ? Math.addExact(number2.getValue(), number1.getValue())
                             : Math.subtractExact(number2.getValue(), number1.getValue())
                     ),
@@ -60,8 +60,8 @@ final class NestedConstantFoldTransformer extends NestedBinaryOperationWithNumbe
                     otherOperand
             );
         } else if (operation2 == BinaryOperation.EQUALS || operation2 == BinaryOperation.GREATER_THAN || operation2 == BinaryOperation.LESS_THAN) {
-            return new BinaryOperationNode(
-                    new NumberNode(operation1 == BinaryOperation.ADD
+            return Nodes.op(
+                    Nodes.number(operation1 == BinaryOperation.ADD
                             ? Math.subtractExact(number2.getValue(), number1.getValue())
                             : Math.addExact(number2.getValue(), number1.getValue())
                     ),
@@ -81,19 +81,19 @@ final class NestedConstantFoldTransformer extends NestedBinaryOperationWithNumbe
             return null;
         }
         if (operation2 == BinaryOperation.ADD || operation2 == BinaryOperation.SUBTRACT) {
-            return new BinaryOperationNode(
+            return Nodes.op(
                     otherOperand,
                     operation1,
-                    new NumberNode(operation1 == operation2
+                    Nodes.number(operation1 == operation2
                             ? Math.addExact(number1.getValue(), number2.getValue())
                             : Math.subtractExact(number1.getValue(), number2.getValue())
                     )
             );
         } else if (operation2 == BinaryOperation.EQUALS || operation2 == BinaryOperation.GREATER_THAN || operation2 == BinaryOperation.LESS_THAN) {
-            return new BinaryOperationNode(
+            return Nodes.op(
                     otherOperand,
                     operation2,
-                    new NumberNode(operation1 == BinaryOperation.ADD
+                    Nodes.number(operation1 == BinaryOperation.ADD
                             ? Math.subtractExact(number2.getValue(), number1.getValue())
                             : Math.addExact(number2.getValue(), number1.getValue())
                     )
@@ -111,8 +111,8 @@ final class NestedConstantFoldTransformer extends NestedBinaryOperationWithNumbe
             return null;
         }
         if (operation2 == BinaryOperation.ADD || operation2 == BinaryOperation.SUBTRACT) {
-            return new BinaryOperationNode(
-                    new NumberNode(operation2 == BinaryOperation.ADD
+            return Nodes.op(
+                    Nodes.number(operation2 == BinaryOperation.ADD
                             ? Math.addExact(number1.getValue(), number2.getValue())
                             : Math.subtractExact(number1.getValue(), number2.getValue())
                     ),
@@ -121,14 +121,14 @@ final class NestedConstantFoldTransformer extends NestedBinaryOperationWithNumbe
             );
         } else if (operation2 == BinaryOperation.EQUALS || operation2 == BinaryOperation.GREATER_THAN || operation2 == BinaryOperation.LESS_THAN) {
             if (operation1 == BinaryOperation.ADD) {
-                return new BinaryOperationNode(
+                return Nodes.op(
                         otherOperand,
                         operation2,
-                        new NumberNode(Math.subtractExact(number2.getValue(), number1.getValue()))
+                        Nodes.number(Math.subtractExact(number2.getValue(), number1.getValue()))
                 );
             } else {
-                return new BinaryOperationNode(
-                        new NumberNode(Math.subtractExact(number1.getValue(), number2.getValue())),
+                return Nodes.op(
+                        Nodes.number(Math.subtractExact(number1.getValue(), number2.getValue())),
                         operation2,
                         otherOperand
                 );

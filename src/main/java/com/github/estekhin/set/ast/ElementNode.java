@@ -5,7 +5,11 @@ import org.jetbrains.annotations.Nullable;
 
 public final class ElementNode extends ExpressionNode {
 
-    public static final @NotNull String ELEMENT = "element";
+    static final @NotNull String ELEMENT = "element";
+
+
+    ElementNode() {
+    }
 
 
     @Override

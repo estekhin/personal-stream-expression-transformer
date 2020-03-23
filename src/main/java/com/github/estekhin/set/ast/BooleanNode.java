@@ -5,13 +5,13 @@ import org.jetbrains.annotations.Nullable;
 
 public final class BooleanNode extends ExpressionNode {
 
-    public static final @NotNull String TRUE = "(1=1)";
-    public static final @NotNull String FALSE = "(1=0)";
+    static final @NotNull String TRUE = "(1=1)";
+    static final @NotNull String FALSE = "(1=0)";
 
     private final boolean value;
 
 
-    public BooleanNode(boolean value) {
+    BooleanNode(boolean value) {
         this.value = value;
     }
 

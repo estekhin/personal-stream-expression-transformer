@@ -6,11 +6,11 @@ import org.jetbrains.annotations.Nullable;
 
 public final class MapCallNode extends CallNode {
 
-    public static final @NotNull String MAP_START = "map{";
-    public static final @NotNull String MAP_END = "}";
+    static final @NotNull String MAP_START = "map{";
+    static final @NotNull String MAP_END = "}";
 
 
-    public MapCallNode(@NotNull ExpressionNode operand) {
+    MapCallNode(@NotNull ExpressionNode operand) {
         super(operand);
         if (operand.type() != ExpressionType.INTEGER) {
             throw new ExpressionTypeException(String.format(

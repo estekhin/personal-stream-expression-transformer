@@ -6,11 +6,11 @@ import org.jetbrains.annotations.Nullable;
 
 public final class FilterCallNode extends CallNode {
 
-    public static final @NotNull String FILTER_START = "filter{";
-    public static final @NotNull String FILTER_END = "}";
+    static final @NotNull String FILTER_START = "filter{";
+    static final @NotNull String FILTER_END = "}";
 
 
-    public FilterCallNode(@NotNull ExpressionNode operand) {
+    FilterCallNode(@NotNull ExpressionNode operand) {
         super(operand);
         if (operand.type() != ExpressionType.BOOLEAN) {
             throw new ExpressionTypeException(String.format(

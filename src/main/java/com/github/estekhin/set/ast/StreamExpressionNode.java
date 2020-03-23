@@ -8,16 +8,16 @@ import org.jetbrains.annotations.Nullable;
 
 public final class StreamExpressionNode extends Node {
 
-    public static final @NotNull String CALL_CHAIN_SEPARATOR = "%>%";
+    static final @NotNull String CALL_CHAIN_SEPARATOR = "%>%";
 
     private final @NotNull List<CallNode> calls;
 
 
-    public StreamExpressionNode(@NotNull CallNode... calls) {
+    StreamExpressionNode(@NotNull CallNode... calls) {
         this(List.of(calls));
     }
 
-    public StreamExpressionNode(@NotNull List<CallNode> calls) {
+    StreamExpressionNode(@NotNull List<CallNode> calls) {
         if (calls.isEmpty()) {
             throw new IllegalArgumentException("calls is empty");
         }

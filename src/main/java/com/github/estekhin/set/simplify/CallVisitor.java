@@ -7,6 +7,7 @@ import com.github.estekhin.set.ast.ExpressionNode;
 import com.github.estekhin.set.ast.FilterCallNode;
 import com.github.estekhin.set.ast.MapCallNode;
 import com.github.estekhin.set.ast.NodeVisitor;
+import com.github.estekhin.set.ast.Nodes;
 import org.jetbrains.annotations.NotNull;
 
 final class CallVisitor implements NodeVisitor<CallNode> {
@@ -16,7 +17,7 @@ final class CallVisitor implements NodeVisitor<CallNode> {
         ExpressionNode transformedOperand = transform(node.getOperand());
         return node.getOperand().equals(transformedOperand)
                 ? node
-                : new FilterCallNode(transformedOperand);
+                : Nodes.filter(transformedOperand);
     }
 
     @Override
@@ -24,7 +25,7 @@ final class CallVisitor implements NodeVisitor<CallNode> {
         ExpressionNode transformedOperand = transform(node.getOperand());
         return node.getOperand().equals(transformedOperand)
                 ? node
-                : new MapCallNode(transformedOperand);
+                : Nodes.map(transformedOperand);
     }
 
     private static @NotNull ExpressionNode transform(@NotNull ExpressionNode node) {
