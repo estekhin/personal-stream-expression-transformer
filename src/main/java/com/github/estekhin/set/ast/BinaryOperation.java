@@ -7,9 +7,11 @@ public enum BinaryOperation {
     ADD("+", ExpressionType.INTEGER, ExpressionType.INTEGER),
     SUBTRACT("-", ExpressionType.INTEGER, ExpressionType.INTEGER),
     MULTIPLY("*", ExpressionType.INTEGER, ExpressionType.INTEGER),
+
+    EQUALS("=", ExpressionType.INTEGER, ExpressionType.BOOLEAN),
     GREATER_THAN(">", ExpressionType.INTEGER, ExpressionType.BOOLEAN),
     LESS_THAN("<", ExpressionType.INTEGER, ExpressionType.BOOLEAN),
-    EQUALS("=", ExpressionType.INTEGER, ExpressionType.BOOLEAN),
+
     AND("&", ExpressionType.BOOLEAN, ExpressionType.BOOLEAN),
     OR("|", ExpressionType.BOOLEAN, ExpressionType.BOOLEAN);
 

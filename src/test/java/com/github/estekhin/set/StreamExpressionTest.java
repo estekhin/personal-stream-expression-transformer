@@ -174,6 +174,30 @@ class StreamExpressionTest {
                 Arguments.of(
                         "map{(-1+element)}",
                         "filter{(1=1)}%>%map{(element-1)}"
+                ),
+                Arguments.of(
+                        "filter{((element-(element*element))=-1)}",
+                        "filter{(((element*element)-element)=1)}%>%map{element}"
+                ),
+                Arguments.of(
+                        "filter{(-1=(element-(element*element)))}",
+                        "filter{(((element*element)-element)=1)}%>%map{element}"
+                ),
+                Arguments.of(
+                        "filter{((element-(element*element))>-1)}",
+                        "filter{(((element*element)-element)<1)}%>%map{element}"
+                ),
+                Arguments.of(
+                        "filter{(-1>(element-(element*element)))}",
+                        "filter{(((element*element)-element)>1)}%>%map{element}"
+                ),
+                Arguments.of(
+                        "filter{((element-(element*element))<-1)}",
+                        "filter{(((element*element)-element)>1)}%>%map{element}"
+                ),
+                Arguments.of(
+                        "filter{(-1<(element-(element*element)))}",
+                        "filter{(((element*element)-element)<1)}%>%map{element}"
                 )
         );
     }

@@ -104,6 +104,30 @@ class ExpressionTransformerTest {
                         op(number(-1), ADD, element()),
                         op(element(), SUBTRACT, number(1))
                 ),
+                Arguments.of(
+                        op(op(element(), SUBTRACT, op(element(), MULTIPLY, element())), EQUALS, number(-1)),
+                        op(number(1), EQUALS, op(op(element(), MULTIPLY, element()), SUBTRACT, element()))
+                ),
+                Arguments.of(
+                        op(number(-1), EQUALS, op(element(), SUBTRACT, op(element(), MULTIPLY, element()))),
+                        op(op(op(element(), MULTIPLY, element()), SUBTRACT, element()), EQUALS, number(1))
+                ),
+                Arguments.of(
+                        op(op(element(), SUBTRACT, op(element(), MULTIPLY, element())), GREATER_THAN, number(-1)),
+                        op(number(1), GREATER_THAN, op(op(element(), MULTIPLY, element()), SUBTRACT, element()))
+                ),
+                Arguments.of(
+                        op(number(-1), GREATER_THAN, op(element(), SUBTRACT, op(element(), MULTIPLY, element()))),
+                        op(op(op(element(), MULTIPLY, element()), SUBTRACT, element()), GREATER_THAN, number(1))
+                ),
+                Arguments.of(
+                        op(op(element(), SUBTRACT, op(element(), MULTIPLY, element())), LESS_THAN, number(-1)),
+                        op(number(1), LESS_THAN, op(op(element(), MULTIPLY, element()), SUBTRACT, element()))
+                ),
+                Arguments.of(
+                        op(number(-1), LESS_THAN, op(element(), SUBTRACT, op(element(), MULTIPLY, element()))),
+                        op(op(op(element(), MULTIPLY, element()), SUBTRACT, element()), LESS_THAN, number(1))
+                ),
 
                 // BooleanConstantTransformer
                 Arguments.of(
