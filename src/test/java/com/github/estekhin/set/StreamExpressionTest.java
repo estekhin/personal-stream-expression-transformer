@@ -24,6 +24,7 @@ class StreamExpressionTest {
             "nestedConstantFold",
             "sameOperand",
             "elementFirst",
+            "binaryFirst",
     })
     void process(@NotNull String sourceExpression, @NotNull String processedExpression) {
         assertEquals(processedExpression, StreamExpression.process(sourceExpression));
@@ -442,6 +443,51 @@ class StreamExpressionTest {
                 Arguments.of(
                         "filter{(1>element)}",
                         "filter{(element<1)}%>%map{element}"
+                )
+        );
+    }
+
+    static @NotNull Stream<Arguments> binaryFirst() {
+        return Stream.of(
+                Arguments.of(
+                        "map{(1+(element*element))}",
+                        "filter{(1=1)}%>%map{((element*element)+1)}"
+                ),
+                Arguments.of(
+                        "map{(element+(element*element))}",
+                        "filter{(1=1)}%>%map{((element*element)+element)}"
+                ),
+                Arguments.of(
+                        "map{(2*(element*element))}",
+                        "filter{(1=1)}%>%map{((element*element)*2)}"
+                ),
+                Arguments.of(
+                        "map{(element*(element*element))}",
+                        "filter{(1=1)}%>%map{((element*element)*element)}"
+                ),
+                Arguments.of(
+                        "filter{(1=(element*element))}",
+                        "filter{((element*element)=1)}%>%map{element}"
+                ),
+                Arguments.of(
+                        "filter{(element=(element*element))}",
+                        "filter{((element*element)=element)}%>%map{element}"
+                ),
+                Arguments.of(
+                        "filter{(1<(element*element))}",
+                        "filter{((element*element)>1)}%>%map{element}"
+                ),
+                Arguments.of(
+                        "filter{(element<(element*element))}",
+                        "filter{((element*element)>element)}%>%map{element}"
+                ),
+                Arguments.of(
+                        "filter{(1>(element*element))}",
+                        "filter{((element*element)<1)}%>%map{element}"
+                ),
+                Arguments.of(
+                        "filter{(element>(element*element))}",
+                        "filter{((element*element)<element)}%>%map{element}"
                 )
         );
     }

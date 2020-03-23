@@ -254,27 +254,6 @@ class ExpressionTransformerTest {
                         op(op(number(1), SUBTRACT, element()), LESS_THAN, number(2)),
                         op(number(-1), LESS_THAN, element())
                 ),
-                // ElementFirstTransformer
-                Arguments.of(
-                        op(number(1), ADD, element()),
-                        op(element(), ADD, number(1))
-                ),
-                Arguments.of(
-                        op(number(2), MULTIPLY, element()),
-                        op(element(), MULTIPLY, number(2))
-                ),
-                Arguments.of(
-                        op(number(2), EQUALS, element()),
-                        op(element(), EQUALS, number(2))
-                ),
-                Arguments.of(
-                        op(number(2), GREATER_THAN, element()),
-                        op(element(), LESS_THAN, number(2))
-                ),
-                Arguments.of(
-                        op(number(2), LESS_THAN, element()),
-                        op(element(), GREATER_THAN, number(2))
-                ),
 
                 // SameOperandTransformer
                 Arguments.of(
@@ -305,6 +284,75 @@ class ExpressionTransformerTest {
                         op(op(element(), GREATER_THAN, number(0)), OR, op(element(), GREATER_THAN, number(0))),
                         op(element(), GREATER_THAN, number(0))
                 ),
+
+                // ElementFirstTransformer
+                Arguments.of(
+                        op(number(1), ADD, element()),
+                        op(element(), ADD, number(1))
+                ),
+                Arguments.of(
+                        op(number(2), MULTIPLY, element()),
+                        op(element(), MULTIPLY, number(2))
+                ),
+                Arguments.of(
+                        op(number(2), EQUALS, element()),
+                        op(element(), EQUALS, number(2))
+                ),
+                Arguments.of(
+                        op(number(2), GREATER_THAN, element()),
+                        op(element(), LESS_THAN, number(2))
+                ),
+                Arguments.of(
+                        op(number(2), LESS_THAN, element()),
+                        op(element(), GREATER_THAN, number(2))
+                ),
+
+                // BinaryFirstTransformer
+                Arguments.of(
+                        op(number(1), ADD, op(element(), MULTIPLY, element())),
+                        op(op(element(), MULTIPLY, element()), ADD, number(1))
+                ),
+                Arguments.of(
+                        op(element(), ADD, op(element(), MULTIPLY, element())),
+                        op(op(element(), MULTIPLY, element()), ADD, element())
+                ),
+
+                Arguments.of(
+                        op(number(2), MULTIPLY, op(element(), MULTIPLY, element())),
+                        op(op(element(), MULTIPLY, element()), MULTIPLY, number(2))
+                ),
+                Arguments.of(
+                        op(element(), MULTIPLY, op(element(), MULTIPLY, element())),
+                        op(op(element(), MULTIPLY, element()), MULTIPLY, element())
+                ),
+
+                Arguments.of(
+                        op(number(1), EQUALS, op(element(), MULTIPLY, element())),
+                        op(op(element(), MULTIPLY, element()), EQUALS, number(1))
+                ),
+                Arguments.of(
+                        op(element(), EQUALS, op(element(), MULTIPLY, element())),
+                        op(op(element(), MULTIPLY, element()), EQUALS, element())
+                ),
+
+                Arguments.of(
+                        op(number(1), GREATER_THAN, op(element(), MULTIPLY, element())),
+                        op(op(element(), MULTIPLY, element()), LESS_THAN, number(1))
+                ),
+                Arguments.of(
+                        op(element(), GREATER_THAN, op(element(), MULTIPLY, element())),
+                        op(op(element(), MULTIPLY, element()), LESS_THAN, element())
+                ),
+
+                Arguments.of(
+                        op(number(1), LESS_THAN, op(element(), MULTIPLY, element())),
+                        op(op(element(), MULTIPLY, element()), GREATER_THAN, number(1))
+                ),
+                Arguments.of(
+                        op(element(), LESS_THAN, op(element(), MULTIPLY, element())),
+                        op(op(element(), MULTIPLY, element()), GREATER_THAN, element())
+                ),
+
 
                 // no-op
                 Arguments.of(

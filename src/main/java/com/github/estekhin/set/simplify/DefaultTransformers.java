@@ -12,7 +12,8 @@ final class DefaultTransformers {
             new BooleanConstantTransformer(),
             new NestedConstantFoldTransformer(),
             new SameOperandTransformer(),
-            new ElementFirstTransformer()
+            new ElementFirstTransformer(),
+            new BinaryFirstTransformer()
     );
 
 
